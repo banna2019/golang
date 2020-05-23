@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 // func main() {
 // 	fmt.Println("hello world")
 // }
@@ -26,6 +31,12 @@ func main() {
 		time.Sleep(10 * time.Second)
 	*/
 
-	test_pipe()
+	// test_pipe()
+
+	/* 这里代码会被死锁,锁住没法退出*/
+	fmt.Println("start goroute")
+	go test_pipe()
+	fmt.Println("end goroute")
+	time.Sleep(10 * time.Second)
 
 }
