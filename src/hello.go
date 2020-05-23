@@ -1,9 +1,5 @@
 package main
 
-import (
-	"time"
-)
-
 // func main() {
 // 	fmt.Println("hello world")
 // }
@@ -15,14 +11,21 @@ func add(a int, b int) int {
 }
 
 func main() {
+	//这里是单行注释
 	// var c int
 	// c = add(100, 200)
 	// go test_goroute(300, 300)
 	// fmt.Println("add(100,200)=", c)
 	// fmt.Println("Hello World")
 
-	for i := 0; i < 100; i++ {
-		go test_print(i)
-	}
-	time.Sleep(time.Second)
+	//以下是多行注释
+	/*
+		for i := 0; i < 100; i++ {
+			go test_print(i)
+		}
+		time.Sleep(10 * time.Second)
+	*/
+
+	test_pipe()
+
 }
