@@ -27,8 +27,10 @@ func test_pipe() {
 	pipe <- 2
 	pipe <- 3
 
+	sum = <-pipe
 	pipe <- 4
 
+	fmt.Println("sum=", sum)
 	fmt.Println(len(pipe))
 
 }
