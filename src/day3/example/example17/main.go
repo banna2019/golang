@@ -4,6 +4,7 @@ import "fmt"
 
 func modify(a int) {
 	a = 100
+	fmt.Println(a)
 
 }
 

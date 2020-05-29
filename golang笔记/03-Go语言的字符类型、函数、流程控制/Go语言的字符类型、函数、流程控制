@@ -644,7 +644,52 @@ Outline
 			
 	5.课后作业
 		a.编写程序,在终端输出九九乘法表
+		
+			代码地址:
+				https://github.com/banna2019/golang.git
+		
+				目录: golang/src/day4/example1
+		
 		b.一个数如果恰好等于它的因子之和,这个数就称为"完数",例如6=1+2+3.编程找出1000以内的所有完数
+		
+			go build -o bin/wanshu.exe .\day4\work\example2\
+			.\bin\wanshu.exe
+			1000
+			
+			代码地址:
+				https://github.com/banna2019/golang.git
+		
+				目录: golang/src/day4/example2
+				
+			
 		c.输入一个字符串,判断其是否为回文,回文字符串是指从左到右读和从右到做读完全相同的字符串
+			go build -o bin/huiwen.exe .\day4\work\example3\
+			.\bin\huiwen.exe
+			1212
+		
+			代码地址:
+				https://github.com/banna2019/golang.git
+		
+				目录: golang/src/day4/example3
+		
 		d.输入一行字符,分别统计出其中英文字母、空格、数字和其它字符的个数
+		
+			go build -o bin/count.exe .\day4\work\example4\
+			.\bin\count.exe
+			abdcade 1232_aege2qe
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+		
+				目录: golang/src/day4/example4
+
 		e.计算两个大数相加的和,这两个大数会超过int64的表示范围
+
+			go build -o bin/dashu.exe .\day4\work\example5\
+			.\bin\dashu.exe
+			1234+987654
+			
+			代码地址:
+				https://github.com/banna2019/golang.git
+		
+				目录: golang/src/day4/example5
