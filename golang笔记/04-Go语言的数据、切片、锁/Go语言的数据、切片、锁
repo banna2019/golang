@@ -1,15 +1,26 @@
 
 Go语言的数据、切片、锁
 	1.内置函数、递归函数、闭包
-		1).close: 主要用来关闭channel
-		2).len: 用来求长度,比如string、array、slice、map、channel
-		3).new: 用来分配内存,主要用来分配值类型,比如int、struct.返回的是指针
-		4).make: 用来分配内存,主要用来分配引用类型,比如chan、map、slice 
-		5).append" 用来追加元素到数组、slice中
-		6).panic和recover: 用来做错误处理
-		
-		new和make的区别
-			截图(new和make的区别)
+		内置函数(可以直接引用不需要导入)
+			1).close: 主要用来关闭channel
+			2).len: 用来求长度,比如string、array、slice、map、channel
+			3).new: 用来分配内存,主要用来分配值类型,比如int、struct.返回的是指针
+			4).make: 用来分配内存,主要用来分配引用类型,比如chan、map、slice 
+			5).append" 用来追加元素到数组、slice中
+			6).panic和recover: 用来做错误处理
+			
+			new和make的区别
+				截图(new和make的区别)
+				
+				备注:
+					new是返回一个指针(指向内存地址)
+					make是直接返回这个类型,它没有指针
+					
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example2	
+	
 			
 		递归函数
 			一个函数调用自己,就叫做递归
@@ -30,6 +41,12 @@ Go语言的数据、切片、锁
 					fmt.Println(n)
 				}
 				
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example3
+				
+				
 		斐波那契数
 			package main
 			import "fmt"
@@ -48,7 +65,13 @@ Go语言的数据、切片、锁
 				}
 			}
 			
-		
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example3
+			
+	
+	
 		递归函数的设计原则
 			1.一个大问题能够分解成相似的小问题
 			2.定义好出口条件
@@ -97,6 +120,11 @@ Go语言的数据、切片、锁
 				fmt.Println(func1("test"))
 				fmt.Println(func2("test"))
 			}
+			
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example4
 			
 			
 			
@@ -156,8 +184,18 @@ Go语言的数据、切片、锁
 			}
 		}
 		
+			代码地址:
+				https://github.com/banna2019/golang.git
+			
+				目录: golang/src/day4/example/example5
 		
+
 		练习: 使用非递归的方式实现斐波切纳列,打印前100个数.
+		
+			代码地址:
+				https://github.com/banna2019/golang.git
+			
+				目录: golang/src/day4/example/example6
 		
 		
 		1.数组初始化
@@ -186,84 +224,122 @@ Go语言的数据、切片、锁
 				}
 			}
 		
+			代码地址:
+				https://github.com/banna2019/golang.git
+			
+				目录: golang/src/day4/example/example6
 		
 		
-		a.切片: 切片是数组的一个引用,因此切片是引用类型
-		b.切片的长度可以改变,因此,切片是一个可变的数组
-		c.切片遍历方式和数组一样,可以用len()求长度
-		d.cap可以求出slice最大的容量,0 <= len(slice) <= (array),其中array是slice引用的数组
-		e.切片的定义: var 变量名[]类型,比如var str []string var arr []int
-		
-		1.切片初始化: var slice []int = arr[start:end] 包含start到end之间的元素,但不包含end
-		2.Var slice []int = arr[0:end]可以简单写为var slice []int = arr[:end]
-		3.Var slice []int = arr[start:len(arr)]可以简写为var slice[]int = arr[start:]
-		4.Var slice []int = arr[0，len(arr)]可以简写为var slice[]int=arr[:]
-		5.如果要切片最后一个元素去掉,可以这么写:
-			Slice = slice[:len(slice)-1]
+		切片
+			a.切片: 切片是数组的一个引用,因此切片是引用类型
+			b.切片的长度可以改变,因此,切片是一个可变的数组
+			c.切片遍历方式和数组一样,可以用len()求长度
+			d.cap可以求出slice最大的容量,0 <= len(slice) <= cap(array),其中array是slice引用的数组(cap是内置函数)
+			e.切片的定义: var 变量名[]类型,比如var str []string var arr []int
 			
-			
-		练习: 写一个程序,演示切片的各个用法
-			
-		切片的内存布局:
-			截图(切片的内存布局)
-			
-		练习: 写一个程序,演示切片的内存布局
-			
-		
-		通过make来创建切片
-			var slice []type = make([]type,len)
-			slice := make([]type,len)
-			slice := make([]type,len,cap)
-			
-			截图(通过make来创建切片)
-			
-			
-		用append内置函数操作切片
-			slice = append(slice,10)
-			
-			var a = []int{1,2,3}
-			var b = []int{4,5,6}
-			a = append(a,b...)
-			
-		For range遍历切片
-			for index,val := range slice {
-			}
-		
-		切片resize
-			var a = []int{1,3,4,5}
-			b := a[1:2]
-			b = b[0:3]
-		
-		
-		切片拷贝
-			s1 := []int{1,2,3,4,5}
-			s2 := make([]int,10)
-			copy(s2,s1)
-			s3 := []int{1,2,3}
-			s3 = append(s3,s2...)
-			s3 = append(s3,4,5,6)
-			
-			
-		string与slice
-			string底层就是一个byte的数组,因此,也可以进行切片操作
-				str := "hello world"
-				s1 := str[0:5]
-				fmt.Println(s1)
-				
-				s2 := str[5:]
-				fmt.Println(s2)
+			1.切片初始化: var slice []int = arr[start:end] 包含start到end之间的元素,但不包含end
+			2.Var slice []int = arr[0:end]可以简单写为var slice []int = arr[:end]
+			3.Var slice []int = arr[start:len(arr)]可以简写为var slice[]int = arr[start:]
+			4.Var slice []int = arr[0，len(arr)]可以简写为var slice[]int=arr[:]
+			5.如果要切片最后一个元素去掉,可以这么写:
+				Slice = slice[:len(slice)-1]
 				
 				
-		string的底层布局
-			截图(string的底层布局)
+			练习: 写一个程序,演示切片的各个用法
+		
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example7
+			
+				
+			切片的内存布局:
+				截图(切片的内存布局)
+				
+			练习: 写一个程序,演示切片的内存布局
+			
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example7
+				
+			
+			通过make来创建切片
+				var slice []type = make([]type,len)
+				slice := make([]type,len)
+				slice := make([]type,len,cap)
+				
+				截图(通过make来创建切片)
+				
+				备注:
+					自定义数组: 自定义数组是需要人为手动去定义的
+					make创建数组: make是由程序去创建一个数组,这个数组是看不见的,是维护在程序底层的
+				
+				
+			用append内置函数操作切片
+				slice = append(slice,10)
+				
+				var a = []int{1,2,3}
+				var b = []int{4,5,6}
+				a = append(a,b...)
+				
+					备注:
+						append(a,b...)	//针对切片的用法"b..."
+				
+			For range遍历切片
+				for index,val := range slice {
+				}
+			
+			切片resize
+				var a = []int{1,3,4,5}
+				b := a[1:2]
+				b = b[0:3]
 			
 			
-		如何改变string中的字符值?
-			string本身是不可变的,因此要改变string中字符,需要如下操作:
-				str := "hello world"
-				s := []byte(str)
-				s[0] = 'o'
-				str = string(s)
+			切片拷贝
+				s1 := []int{1,2,3,4,5}
+				s2 := make([]int,10)
+				copy(s2,s1)
+				s3 := []int{1,2,3}
+				s3 = append(s3,s2...)
+				s3 = append(s3,4,5,6)
+				
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example8
+				
+				
+			string与slice
+				string底层就是一个byte的数组,因此,也可以进行切片操作
+					str := "hello world"
+					s1 := str[0:5]
+					fmt.Println(s1)
+					
+					s2 := str[5:]
+					fmt.Println(s2)
+					
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example8
+					
+			string的底层布局
+				截图(string的底层布局)
+				
+				
+			如何改变string中的字符值?(把string类型转换为数组,然后进行修改)
+				string本身是不可变的,因此要改变string中字符,需要如下操作:
+					str := "hello world"
+					s := []byte(str)
+					s[0] = 'o'
+					str = string(s)
+					
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example8
+				
 				
 		排序和查找操作
 			排序操作主要都是在sort包中,导入就可以使用了

@@ -1,0 +1,39 @@
+package main
+
+import (
+	"errors"
+	"time"
+)
+
+/*值类型*/
+// func main() {
+// 	var i int
+// 	fmt.Println(i)
+
+// 	j := new(int) //返回一个地址
+// 	*j = 100
+// 	fmt.Println(*j)
+
+// 	//"*"获取内存地址中的值
+// 	//"&"引用内存地址
+// }
+
+
+func test1() {
+	b := 0
+	a := 100 / b
+	fmt.Println(a)
+	return
+}
+
+func main1() {
+	// var a []int  //这样写是切片
+	// var a [5]int //这样写数组,固定数组长度
+
+	var a []int
+	a = append(a, 10, 100, 1000)
+	a = append(a, a...) //"a..."展开slice这里的slice为"10, 100, 1000";"a..."还有一个功能是可变参数
+	fmt.Println(a)
+
+	}
+}
