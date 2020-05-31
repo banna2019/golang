@@ -1,9 +1,11 @@
 
 
-设置环境变量
-	export GOROOT=$PATH:/path/to/go
-	export PATH=$PATH:$GOROOT/bin/
-	export GOPATH=/home/user/project/go 
+设置环境变量(Linux环境下系统变量)
+	export GOROOT=/usr/local/go
+	export GOPATH=/Users/banna/Documents/Github/golang
+	export PATH=$PATH:GOROOT/bin:/usr/local/go/bin
+	export GOBIN=$GOPATH/bin
+	export PATH=$PATH:$GOBIN
 
 
 安装调试工具(断点调试):

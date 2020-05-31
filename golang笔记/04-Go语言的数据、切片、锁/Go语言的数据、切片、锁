@@ -351,10 +351,69 @@ Go语言的数据、切片、锁
 			sort.SearchFloats(a []float64,b float64)从数组a中查找b,前提是a必须有序
 			sort.SearchStrings(a []string,b string)从数组a中查找b,前提是a必须有序
 			
-		
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example9
 			
 		
 		
 	3.map数据结构
+		map简介
+			key-value的数据结构,又叫字段或者关联数组
+
+			a.声明
+				var map 1 map[keytype]valuetype
+				var a map[string]string
+				var a map[string]int
+				var a map[int]string
+				var a map[string]map[string]string
+
+				备注:
+					声明是不会分配内存的,初始化需要make
+
+		map相关操作
+			var a map[string]string = map[string]string{"hello":"world"}
+			a = make(map[string]string,10)
+
+			a["hello"] = "world"	//插入和更新
+			Val,ok := a["hello"]	//查账
+
+			for k,v := range a {	//遍历
+				fmt.Println(k,v)
+			}
+
+			delete(a,"hello")	//删除
+			len(a)				//长度
+
+
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example10
+
+
+
+		map是引用类型
+			func modify(a map[string]int){
+				a["one"] = 34
+			}
+
+		slice of map
+			Items := make([]map[int][int],5)
+			for i := 0;i < 5;i++{
+				items[i] = make(map[int][int])
+			}
+
+
+		map排序
+			a.先获取所有key,把key进行排序
+			b.按照排序好的key,进行遍历
+
+		map反转
+			a.初始化另外一个map,把key、value互换即可
+
+
+
 	4.package介绍
 	5.课后作业
