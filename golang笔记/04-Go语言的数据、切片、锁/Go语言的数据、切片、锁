@@ -390,7 +390,7 @@ Go语言的数据、切片、锁
 				代码地址:
 					https://github.com/banna2019/golang.git
 				
-					目录: golang/src/day4/example/example10
+					目录: golang/src/day4/example/example10 
 
 
 
@@ -410,10 +410,70 @@ Go语言的数据、切片、锁
 			a.先获取所有key,把key进行排序
 			b.按照排序好的key,进行遍历
 
+			备注:
+				map没有其他函数来帮助进行排序,只有先获取到key再来进行排序(sort)
+				map里面的key是无序的
+
+			
+			 代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day4/example/example11
+
+
 		map反转
 			a.初始化另外一个map,把key、value互换即可
 
+				
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day4/example/example11
 
 
 	4.package介绍
+		golang中的包
+			a.golang目前有150个标准的包,覆盖了几乎所有的基础库
+			b.golang.org所有包的文档,没事都翻翻
+
+		线程同步
+			a.import("sync")
+			b.互斥锁,var mu sync,Mutex
+				写比较的多的场景
+
+
+			go build -race -o bin/example12  day4/example/example12/main.go	//编译完程序,在执行程序的时候程序有问题会提示错误
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day4/example/example112
+
+
+			c.读写锁,var mu sync.RWMutex
+				在读多写少的情况下,性能会高很多
+
+				go build -race -o bin/example12  day4/example/example12/main.go	//编译完程序,在执行程序的时候程序有问题会提示错误
+
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example112
+
+
+				atomic	//原子操作包
+
+
+		go get安装第三方包
+			go get github.com/go-sql-driver/mysql
+
+			安装路径在"GOPATH"下面:
+				ls -al /usr/local/go/bin/src/github.com 
+
+
 	5.课后作业
+		实现一个冒泡排序
+		实现一个选择排序
+		实现一个插入排序
+		实现一个快速排序
+
