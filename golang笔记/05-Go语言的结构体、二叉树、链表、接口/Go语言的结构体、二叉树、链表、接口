@@ -40,12 +40,26 @@
 			1)其中b和c范慧慧的都是指向结构体的指针，访问形式化如下:
 				a.stu.Name、stu.Age和stu.Score或者(*stu).Name、(*stu).Age等
 
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example1
+
+
+
 	struct的初始化
 		4.struct的内存布局: struct中的所有字段在内存时候连续的,布局如下:
 			type Rect1 struct{Min,Max Point}
 			type Rect2 struct{Min,Max *Point}
 
 			截图(struct的内存布局)
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example1
+
 
 		5.链表定义
 			type Student struct {
@@ -162,6 +176,6 @@
 				B
 			}
 
-			
+
 2.接口
 3.练习题
