@@ -1,2 +1,167 @@
 
 
+1.结构体和方法
+	Go中的struct
+		1.用来定义复杂数据结构
+		2.struct里面可以包含多个字段(属性)
+		3.struct类型可以定义方法,注意呵呵函数的区别
+		4.struct类型是值类型
+		5.struct类型可以嵌套
+		6.Go语言没有class类型,只有struct类型
+
+	struct的定义
+		1.struct声明:
+			type 标识符 struct{
+				field1 type
+				field2 type
+			}
+
+			例子:
+				type Student struct {
+					Name string
+					Age int
+					Score int
+				}
+
+		2.sturct中字段访问: 和其他语言一样,使用点
+			例子:
+				var stu Student
+				stu.Name = "tony"
+				stu.Age = 18
+				stu.Score = 20
+
+				fmt.Printf("name=%s age=%d score=%d",stu.Name,stu.Age,stu.Score)
+
+		3.struct定义的三种形式:
+			a. var stu Student
+			b. var stu *Student = new(Student)
+			c. var stu *Student = &Student{}
+
+			1)其中b和c范慧慧的都是指向结构体的指针，访问形式化如下:
+				a.stu.Name、stu.Age和stu.Score或者(*stu).Name、(*stu).Age等
+
+	struct的初始化
+		4.struct的内存布局: struct中的所有字段在内存时候连续的,布局如下:
+			type Rect1 struct{Min,Max Point}
+			type Rect2 struct{Min,Max *Point}
+
+			截图(struct的内存布局)
+
+		5.链表定义
+			type Student struct {
+				Name string
+				Next* Student
+			}
+
+			每个节点包含下一个节点的地址,这样把所有的节点都串起来了,通常把链表中的第一个节点叫做链表头
+
+
+		6.双链表定义
+			type Student struct {
+				Name string
+				Next* Student
+				Prev* Student
+			}
+
+
+			如果有两个指针分别指向前一个节点和后一个节点,称为双链表
+
+
+		7.二叉树定义
+			type Student struct{
+				Name string
+				left* Student
+				right* Student
+			}
+
+			如果每个节点有两个指针分别用来指向左子树和右子树,把这样的结构叫做二叉树
+
+
+		8.结构体是用户单独定义的类型,不能和其他类型进行强制转换
+			type Student struct {
+				Number int
+			}
+
+			type Stu Student //alias
+
+			var a Student
+			a = Student(30)
+
+			var b Stu
+			a = b
+
+	工厂模式
+		9.golang中的struct没有构造函数,一般可以使用工厂模式解决这个问题
+			Package model
+			type student struct {
+				Name string
+				Age int
+			}
+
+			func NewStudent(name string,age int)*student{
+				return &student{
+					Name:name,
+					Age:age,
+				}
+			}
+
+			Package main
+			S := new(student)
+			S := model.NewStudent("tony",20)
+
+
+		10.再次强调
+			1.make用来创建map、slice、channel
+			2.new用来创建值类型
+
+
+	struct中的tag
+		11.可以为truct中的每个字段,写上一个tag.这个tag可以通过反射的机制获取到,最常用的场景就是json序列化和反序列化
+
+		type student struct {
+			Name string "this is name field"
+			Age int 	"this is age field"
+		}
+
+	匿名字段
+		12.结构体中字段可以没有名字,即匿名字段
+			type Car struct{
+				Name string
+				Age int
+			}
+
+			type Train struct{
+				Car
+				Start time.Time
+				int
+			}
+
+		13.匿名字段冲突处理
+			type Car struct {
+				Name string
+				Age int
+			}
+
+			type Train struct {
+				Car
+				Start time.Time
+				Age int
+			}
+
+			type A struct{
+				a int
+			}
+
+			type B struct{
+				a int
+				b int
+			}
+
+			type C struct{
+				A
+				B
+			}
+
+			
+2.接口
+3.练习题
