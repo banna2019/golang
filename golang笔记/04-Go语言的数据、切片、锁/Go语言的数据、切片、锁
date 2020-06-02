@@ -472,6 +472,11 @@ Go语言的数据、切片、锁
 
 
 	5.课后作业
+		代码地址:
+			https://github.com/banna2019/golang.git
+				
+			目录: golang/src/day5/example/{example1,example2,example3,example4}
+			
 		实现一个冒泡排序
 		实现一个选择排序
 		实现一个插入排序
