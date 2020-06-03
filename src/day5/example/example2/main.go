@@ -100,7 +100,7 @@ func main() { //这里的链表使用的是尾部插入法
 }*/
 
 /*for循环从头部插入next,链表写法1(头部插入式逆序的)*/
-func main() {
+/*func main() {
 	// var heard *Student = &Student{}
 	var heard *Student = new(Student) //这里需要分配内存
 	heard.Name = "xiaoming"
@@ -113,16 +113,75 @@ func main() {
 			Age:   rand.Intn(100),
 			Score: rand.Float32() * 100,
 		}
-		/*问题段代码
-		stu.next = &heard
+		//问题段代码
+		//stu.next = &heard
 		// heard = stu ----->{heard.Name = stu.Name,heard.Age = stu.Age,heard.next = stu.next}
-		fmt.Println(stu)
-		time.Sleep(time.Second)
-		*/
+		//fmt.Println(stu)
+		//time.Sleep(time.Second)
 
 		stu.next = heard
 		heard = &stu
 	}
 
+	trans(heard)
+}*/
+
+/*指针的指针的写法*/
+func insertHeard(p **Student) { //这里是指针的指针
+	for i := 0; i < 10; i++ {
+		stu := Student{
+			Name:  fmt.Sprintf("stu%d", i),
+			Age:   rand.Intn(100),
+			Score: rand.Float32() * 100,
+		}
+
+		stu.next = *p
+		*p = &stu //这里只是该变了指针副本的值,最终它外面的值是不会发生该变的
+	}
+}
+
+func delNode(p *Student) { //这里删除节点会有问题,不能删除头节点;如果删除头结点,后面的节点没法串联
+	var prev *Student = p
+	for p != nil {
+		if p.Name == "stu6" {
+			prev.next = p.next
+			break
+		}
+		prev = p
+		p = p.next
+	}
+}
+
+func addNode(p *Student, newNode *Student) {
+	for p != nil {
+		if p.Name == "stu7" {
+			newNode.next = p.next
+			p.next = newNode
+			break
+		}
+		p = p.next
+	}
+}
+
+func main() {
+	// var heard *Student = &Student{}
+	// var heard *Student = new(Student) //这里需要分配内存
+	var heard *Student = new(Student) //这里需要分配内存
+	heard.Name = "xiaoming"
+	heard.Age = 18
+	heard.Score = 100
+
+	insertHeard(&heard)
+	trans(heard)
+
+	delNode(heard)
+	trans(heard)
+
+	var newNode *Student = new(Student) //这里需要分配内存
+	newNode.Name = "stu1000"
+	newNode.Age = 18
+	newNode.Score = 100
+
+	addNode(heard, newNode)
 	trans(heard)
 }
