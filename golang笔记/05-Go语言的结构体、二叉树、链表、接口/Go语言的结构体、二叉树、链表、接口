@@ -90,6 +90,12 @@
 
 			如果每个节点有两个指针分别用来指向左子树和右子树,把这样的结构叫做二叉树
 
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example3
+
+
 
 		8.结构体是用户单独定义的类型,不能和其他类型进行强制转换
 			type Student struct {
@@ -103,6 +109,13 @@
 
 			var b Stu
 			a = b
+
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example4
+
 
 	工厂模式
 		9.golang中的struct没有构造函数,一般可以使用工厂模式解决这个问题
@@ -137,6 +150,13 @@
 			Age int 	"this is age field"
 		}
 
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example5
+
+
 	匿名字段
 		12.结构体中字段可以没有名字,即匿名字段
 			type Car struct{
@@ -149,6 +169,7 @@
 				Start time.Time
 				int
 			}
+
 
 		13.匿名字段冲突处理
 			type Car struct {
@@ -177,5 +198,190 @@
 			}
 
 
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example6
+
+
+	方法
+		13.Golang中的方法是作用在特定类型的变量上,因此自定义类型,都可以有方法,而不仅仅是struct
+			定义: func(recevier type) methodName(参数列表)(返回值列表){}
+
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example7
+
+
+		14.方法的调用
+			type A struct{
+				a int
+			}
+
+			func (this A) test() {
+				fmt.Println(this.a)
+			}
+
+			var t A
+			t.test()
+
+		15.方法和函数的区别
+			1).函数调用: function(variable,参数列表)
+			2).方法: variabl.function(参数列表)
+
+
+		16.指针receiver vs值receiver
+			本质上和函数的值传递和地址传递是一样的
+
+
+		17.方法的访问控制,通过大小写控制
+
+		18.继承
+			如果一个struct嵌套了另一个匿名结构体,那么这个结构体可以直接访问匿名结构体的方法,从而实现了继承
+			匿名字段可以实现继承;
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example8
+
+
+
+		19.组合和匿名字段
+			如果一个struct嵌套了另一个结构体,那么这个结构体可以直接访问匿名结构体的方法,从而实现了继承
+			如果一个struct嵌套了另一个有名结构体,那么这个模式就叫组合.
+
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example8			
+
+		20.多重继承
+			如果一个struct嵌套了多个匿名结构体,那么这个结构体可以直接访问多个匿名结构体的方法,从而十号线了多重继承.
+
+		21.实现String()
+			如果一个变量实现了String()这个方法,那么fmt.Println默认会调用这个变量的String()进行输出
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example9
+
+
 2.接口
+	1.定义
+		Interface类型可以定义一组方法,但是会这些不需要实现.并interface不能包含任何变量.
+
+
+		比如:
+			type example interface{
+				Method1(参数列表)返回值列表
+				Method2(参数列表)返回值列表
+				...
+			}
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day5/example/example10
+
+
+	2.interface类型默认是一个指针
+		type example interface {
+			Method1(参数列表)返回值列表
+			Method2(参数列表)返回值列表
+			...
+		}
+
+		var a example
+		a.Mehod1()
+
+
+		备注:
+			这里的example接口没有被初始化化,没有被赋值
+			接口是一个地址
+
+	3.接口实现
+		a.Golang中的接口,不需要显示的实现.只要一个变量,含有接口类型中的所有方法,那么这个变量就实现这个接口.因此,golang中没有implement类似的关键字
+		b.如果一个变量含有了多个interface类型的方法,那么这个变量就实现了多个接口.
+		c.Golang中的接口,不需要显示的实现.只要一个变量,含有接口类型中的所有方法,那么这个变量就实现这个接口.因此,golang中没有implement类似的关键字
+		d.如果一个变量含有了多个interface类型的方法,那么这个变量就实现了多个接口.
+		e.如果一个变量含有了1个interface的方法部分方法,那么这个变量没有实现这个接口
+
+	4.多态
+		一种事物的多种形态,都可以按照统一的接口进行操作
+
+	5.接口嵌套
+	 	一个接口可以嵌套在另外的接口,如下所示:
+	 		type ReadWrite interface {
+	 			Read(b Buffer) bool
+	 			Write(b Buffer) bool
+	 		}
+
+	 		type Lock interface{
+	 			Lock()
+	 			Unlock()
+	 		}
+
+	 		type File interface{
+	 			ReadWrite
+	 			Lock
+	 			Close()
+	 		}
+
+
+	6.类型断言,由于接口是一般类型,不知道具体类型,如果要转成具体类型可以采用以下方法进行转换:
+		var t int
+		var x interface{}
+		x = t
+		y = x.(int) //转成int
+
+
+	7.练习,写一个函数判断传入参数的类型
+		func classifier(iterms ...interface{}){
+			for i,x := range iterms {
+				switch x.(type) {
+					case bool: fmt.Printf("param #%d is a bool\n",i)
+					case float64: fmt.Printf("param #%d is a float64",i)
+					case int,int64: fmt.Printf("param #%d is an int\n",i)
+					case nil: fmt.Printf("param #%d is nil\n",i)
+					case string: fmt.Printf("param #%d's type is string",i)
+					default: fmt.Println("jparam #%d's type is unknown\n",i)
+				}
+			}
+		}
+
+
+	8.类型断言,采用type switch方式
+		switch t := arealntf.(type){
+		case *Square:
+			fmt.Printf("Type Square %T with value %v\n",t,t)
+		case *Circle:
+			fmt.Printf("Type Circle %T with value %v\n",t,t)
+		case float32:
+			fmt.Printf("Type float32 with value %v\n",t)
+		case nil:
+			fmt.Println("nil value: nothing to check?")
+		default:
+			fmt.Printf("Unexpected type %T",t)
+		}
+
+
+	9.空接口,Interface{}
+		空接口没有任何方法,所以所有类型都实现了空接口
+		var a int
+		var b interface{}
+		b = a
+
+
+
 3.练习题
+	1.实现一个图书管理系统,具有如下功能:
+		a.书籍录入功能,书籍信息包括书名、副本数、作者、出版日期
+		b.书籍查询功能,按照书名、作者、出版日期等条件检索
+		c.学生信息管理功能,管理每个学生的姓名、年级、身份证、性别、借了什么书等信息
+		d.借书功能,学生可以查询想要的书籍,进行借出
+		e.书籍管理功能,可以看到每种书被哪些人借出了
