@@ -1,0 +1,15 @@
+
+
+cursorLineEnd			//光标跳到行尾				option + e
+cursorLineStart			//光标跳到行尾				option + w
+copy line down			//向下赋值当前行				option + d
+i 						//锁住不能写		
+		
+shift+command+k 		//删除行						option + s
+deleteWordLeft 		    //光标左边的字符				option + f
+deleteWordRight 		//光标右边的字符				option + c
+command+delete 			//删除光标左侧的内容			option + j
+control+k				//删除光标右侧的内容 			option + k
+		
+insertLineBefore		//在上面插入一行				option + q
+insertLineAfter			//在下面插入一行				option + a

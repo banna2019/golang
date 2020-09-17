@@ -1,0 +1,36 @@
+
+VSCode配置
+打开VSCode的 Code -》首选项 -》设置 打开 settings.json 文件，增加 go 的配置信息
+
+    // go
+    "go.formatTool": "goreturns",
+    "go.goroot": "/usr/local/go",
+    "go.gopath": "/Users/用户名/Documents/Code/Golang",
+
+
+VSCode的Go调试配置
+打开VSCode的执行 调试 -》启动调试 编辑launch.json
+
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GoLaunch",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2345,
+            "host": "127.0.0.1",
+            "program": "${fileDirname}",
+            "env": {},
+            "args": [],
+            "showLog": true,
+            "trace": true
+        }
+    ]
+
+
+Tips:
+Q：如果F5启动调试报错，提示 Failed to continue: Check the debug console for details
+
+A：可以在终端执行 xcode-select --install 安装命令行工具（在万能的 stackoverflow 搜到的）
