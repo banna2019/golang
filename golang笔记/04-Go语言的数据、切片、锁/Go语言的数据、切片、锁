@@ -1,0 +1,484 @@
+
+Go语言的数据、切片、锁
+	1.内置函数、递归函数、闭包
+		内置函数(可以直接引用不需要导入)
+			1).close: 主要用来关闭channel
+			2).len: 用来求长度,比如string、array、slice、map、channel
+			3).new: 用来分配内存,主要用来分配值类型,比如int、struct.返回的是指针
+			4).make: 用来分配内存,主要用来分配引用类型,比如chan、map、slice 
+			5).append" 用来追加元素到数组、slice中
+			6).panic和recover: 用来做错误处理
+			
+			new和make的区别
+				截图(new和make的区别)
+				
+				备注:
+					new是返回一个指针(指向内存地址)
+					make是直接返回这个类型,它没有指针
+					
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example2	
+	
+			
+		递归函数
+			一个函数调用自己,就叫做递归
+				package main
+				import (
+					"fmt"
+				)
+				
+				func calc(n int) int{
+					if n == 1{
+						return 1
+					}
+					return calc(n-1) * n
+				}
+				
+				func main() {
+					n := calc(5)
+					fmt.Println(n)
+				}
+				
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example3
+				
+				
+		斐波那契数
+			package main
+			import "fmt"
+			
+			func fab(n int) int{
+				if n <= 1 {
+					return
+				}
+				return fab(n-1) + fab(n-2)
+			}
+			
+			func main(){
+				for i := 0;i < 10;i++ {
+					n := fab(i)
+					fmt.Println(n)
+				}
+			}
+			
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example3
+			
+	
+	
+		递归函数的设计原则
+			1.一个大问题能够分解成相似的小问题
+			2.定义好出口条件
+			
+			
+		闭包
+			闭包: 一个函数与其相关的引用环境组合而成的实体
+				package main
+				import "fmt"
+				
+				func main() {
+					var f = Adder()
+					fmt.Println(f(1),"_")
+					fmt.Println(f(20),"_")
+					fmt.Println(f(300))
+				}
+				
+				func Adder() func(int) int {
+					var x int
+					return func(delta int) int{
+						x += delta
+						return x
+					}					
+				}
+				
+				
+		闭包例子
+			package main
+			import (
+				"fmt"
+				"strings"
+			)
+			
+			func makeSuffixFunc(suffix string) func(string){
+				return func(name string) string {
+					if !strings.HasSuffix(name,suffix){
+						return name + suffix
+					}
+					return name
+				}
+			}
+					
+			func main() {
+				func1 := makeSuffixFunc(".bmp")
+				func2 := makeSuffixFunc(".jpg")
+				fmt.Println(func1("test"))
+				fmt.Println(func2("test"))
+			}
+			
+				代码地址:
+					https://github.com/banna2019/golang.git
+			
+					目录: golang/src/day4/example/example4
+			
+			
+			
+	2.数组与切片
+		数组: 是同一种数据类型的固定长度的序列
+		数组定义: var a [len]int,比如: var a[5]int,一旦定义,长度不能变
+		长度是数组类型的一部分,因此var a[5] int和var a[10]int是不同的类型
+		数组可以通过下标进行访问,下标是从0开始,最后一个元素下标是: len-1
+			for i := 0; i < len(a);i++ {
+			}
+			
+			for index, v := range a {
+			}
+			
+		访问越界,如果下标在数组合法范围之外,则触发访问越界,会panic
+		数组是值类型,因此改变副本的值,不会改变本身的值
+			arr2 := arr1
+			arr2[2] = 100
+		
+		package main
+		import (
+			"fmt"
+		)
+		
+		func modify(arr [5]int) {
+			arr[0] = 100
+			return
+		}
+		
+		func main() {
+			var a[5]int
+			
+			modify(a)
+			for i := 0;i < len(a);i++ {
+				fmt.Println(a[i])
+			}
+		}
+		
+		
+		
+		package main
+		import(
+			"fmt"
+		)
+		
+		func modify(arr *[5]int){
+			(*arr)[0] = 100
+			return
+		}
+		
+		func main() {
+			var a [5]int
+			
+			modify(&a)
+			for i := 0;i < len(a);i++ {
+				fmt.Println(a[i])
+			}
+		}
+		
+			代码地址:
+				https://github.com/banna2019/golang.git
+			
+				目录: golang/src/day4/example/example5
+		
+
+		练习: 使用非递归的方式实现斐波切纳列,打印前100个数.
+		
+			代码地址:
+				https://github.com/banna2019/golang.git
+			
+				目录: golang/src/day4/example/example6
+		
+		
+		1.数组初始化
+			a. var age0 [5]int = [5]int{1,2,3}
+			b. var age1 = [5]int{1,2,3,4,5}
+			c. var age2 = [...]int{1,2,3,4,5,6}
+			d. var str = [5]string{3:"hello world",4:"tom"}
+		
+		2.多维数组
+			a. var age [5][3]int
+			b. var f [2][3]int = [...]int{{1,2,3},{7,8,9}}
+			
+		3.多维数组遍历
+			package main
+			import(
+				"fmt"
+			)
+			
+			func main(){
+				var f [2][3]int = [...][3]int{{1,2,3},{7,8,9}}
+				for k1,v1 := range f{
+					for k2,v2 := range v1 {
+						fmt.Printf("(%d,%d)=%d",k1,k2,v2)
+					}
+					fmt.Println()
+				}
+			}
+		
+			代码地址:
+				https://github.com/banna2019/golang.git
+			
+				目录: golang/src/day4/example/example6
+		
+		
+		切片
+			a.切片: 切片是数组的一个引用,因此切片是引用类型
+			b.切片的长度可以改变,因此,切片是一个可变的数组
+			c.切片遍历方式和数组一样,可以用len()求长度
+			d.cap可以求出slice最大的容量,0 <= len(slice) <= cap(array),其中array是slice引用的数组(cap是内置函数)
+			e.切片的定义: var 变量名[]类型,比如var str []string var arr []int
+			
+			1.切片初始化: var slice []int = arr[start:end] 包含start到end之间的元素,但不包含end
+			2.Var slice []int = arr[0:end]可以简单写为var slice []int = arr[:end]
+			3.Var slice []int = arr[start:len(arr)]可以简写为var slice[]int = arr[start:]
+			4.Var slice []int = arr[0，len(arr)]可以简写为var slice[]int=arr[:]
+			5.如果要切片最后一个元素去掉,可以这么写:
+				Slice = slice[:len(slice)-1]
+				
+				
+			练习: 写一个程序,演示切片的各个用法
+		
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example7
+			
+				
+			切片的内存布局:
+				截图(切片的内存布局)
+				
+			练习: 写一个程序,演示切片的内存布局
+			
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example7
+				
+			
+			通过make来创建切片
+				var slice []type = make([]type,len)
+				slice := make([]type,len)
+				slice := make([]type,len,cap)
+				
+				截图(通过make来创建切片)
+				
+				备注:
+					自定义数组: 自定义数组是需要人为手动去定义的
+					make创建数组: make是由程序去创建一个数组,这个数组是看不见的,是维护在程序底层的
+				
+				
+			用append内置函数操作切片
+				slice = append(slice,10)
+				
+				var a = []int{1,2,3}
+				var b = []int{4,5,6}
+				a = append(a,b...)
+				
+					备注:
+						append(a,b...)	//针对切片的用法"b..."
+				
+			For range遍历切片
+				for index,val := range slice {
+				}
+			
+			切片resize
+				var a = []int{1,3,4,5}
+				b := a[1:2]
+				b = b[0:3]
+			
+			
+			切片拷贝
+				s1 := []int{1,2,3,4,5}
+				s2 := make([]int,10)
+				copy(s2,s1)
+				s3 := []int{1,2,3}
+				s3 = append(s3,s2...)
+				s3 = append(s3,4,5,6)
+				
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example8
+				
+				
+			string与slice
+				string底层就是一个byte的数组,因此,也可以进行切片操作
+					str := "hello world"
+					s1 := str[0:5]
+					fmt.Println(s1)
+					
+					s2 := str[5:]
+					fmt.Println(s2)
+					
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example8
+					
+			string的底层布局
+				截图(string的底层布局)
+				
+				
+			如何改变string中的字符值?(把string类型转换为数组,然后进行修改)
+				string本身是不可变的,因此要改变string中字符,需要如下操作:
+					str := "hello world"
+					s := []byte(str)
+					s[0] = 'o'
+					str = string(s)
+					
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example8
+				
+				
+		排序和查找操作
+			排序操作主要都是在sort包中,导入就可以使用了
+				impot("sort")
+				
+			sort.Ints对整数进行排序,sort.Strings对字符串进行排序,sort.Float64s对浮点数进行排序
+			
+			sort.SearchInts(a []int,b int)从数组a中查找b,前提是a必须有序
+			sort.SearchFloats(a []float64,b float64)从数组a中查找b,前提是a必须有序
+			sort.SearchStrings(a []string,b string)从数组a中查找b,前提是a必须有序
+			
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example9
+			
+		
+		
+	3.map数据结构
+		map简介
+			key-value的数据结构,又叫字段或者关联数组
+
+			a.声明
+				var map 1 map[keytype]valuetype
+				var a map[string]string
+				var a map[string]int
+				var a map[int]string
+				var a map[string]map[string]string
+
+				备注:
+					声明是不会分配内存的,初始化需要make
+
+		map相关操作
+			var a map[string]string = map[string]string{"hello":"world"}
+			a = make(map[string]string,10)
+
+			a["hello"] = "world"	//插入和更新
+			Val,ok := a["hello"]	//查账
+
+			for k,v := range a {	//遍历
+				fmt.Println(k,v)
+			}
+
+			delete(a,"hello")	//删除
+			len(a)				//长度
+
+
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example10 
+
+
+
+		map是引用类型
+			func modify(a map[string]int){
+				a["one"] = 34
+			}
+
+		slice of map
+			Items := make([]map[int][int],5)
+			for i := 0;i < 5;i++{
+				items[i] = make(map[int][int])
+			}
+
+
+		map排序
+			a.先获取所有key,把key进行排序
+			b.按照排序好的key,进行遍历
+
+			备注:
+				map没有其他函数来帮助进行排序,只有先获取到key再来进行排序(sort)
+				map里面的key是无序的
+
+			
+			 代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day4/example/example11
+
+
+		map反转
+			a.初始化另外一个map,把key、value互换即可
+
+				
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day4/example/example11
+
+
+	4.package介绍
+		golang中的包
+			a.golang目前有150个标准的包,覆盖了几乎所有的基础库
+			b.golang.org所有包的文档,没事都翻翻
+
+		线程同步
+			a.import("sync")
+			b.互斥锁,var mu sync,Mutex
+				写比较的多的场景
+
+
+			go build -race -o bin/example12  day4/example/example12/main.go	//编译完程序,在执行程序的时候程序有问题会提示错误
+
+			代码地址:
+				https://github.com/banna2019/golang.git
+				
+				目录: golang/src/day4/example/example112
+
+
+			c.读写锁,var mu sync.RWMutex
+				在读多写少的情况下,性能会高很多
+
+				go build -race -o bin/example12  day4/example/example12/main.go	//编译完程序,在执行程序的时候程序有问题会提示错误
+
+				代码地址:
+					https://github.com/banna2019/golang.git
+				
+					目录: golang/src/day4/example/example112
+
+
+				atomic	//原子操作包
+
+
+		go get安装第三方包
+			go get github.com/go-sql-driver/mysql
+
+			安装路径在"GOPATH"下面:
+				ls -al /usr/local/go/bin/src/github.com 
+
+
+	5.课后作业
+		代码地址:
+			https://github.com/banna2019/golang.git
+				
+			目录: golang/src/day5/example/{example1,example2,example3,example4}
+			
+		实现一个冒泡排序
+		实现一个选择排序
+		实现一个插入排序
+		实现一个快速排序
+

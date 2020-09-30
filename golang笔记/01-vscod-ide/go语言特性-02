@@ -1,0 +1,88 @@
+
+
+gloang语言特性
+	1.垃圾回收
+		a.内存自动回收，再也不需要开发人员管理内存
+		b.开发人员专注业务实现,降低了心智负担
+		c.只需要new分配内存,不需要释放
+		
+	2.天然并发
+		a.从语言层面支持并发,非常简单
+		b.goroute,轻量级线程,创建成千上万goroute成为可能
+		c.基于CSP(Communicating Sequential Process-通信顺序过程)模型实现
+		
+		package main
+		import(
+			"fmt"
+		)
+		
+		func main() {
+			fmt.Println("Hello World")
+		}
+	
+		备注:
+			代码执行
+				go run .\hello.go .\test.go
+	
+	3.channel
+		a.管道,类似unix/linux中的pipe
+		b.多个goroute之间通过channel进行通信		//goroute每一个都是一个独立的调度单位
+		c.支持任何类型
+		
+		func main() {
+			pipe := make (chan int,3)
+			pipe <- 1
+			pipe <-2
+		}
+
+
+
+		package main
+
+		import (
+			"fmt"
+		)
+
+		func test_pipe() {
+			pipe := make(chan int, 3)
+			pipe <- 1
+			pipe <- 2
+			pipe <- 3
+
+			var t1 int
+			t1 = <-pipe
+
+			pipe <- 4
+
+			fmt.Println(t1)
+			fmt.Println(len(pipe))
+
+		}
+
+
+		代码执行:
+			go run .\hello.go .\pipe.go
+
+ 	备注:
+		golang中goroute和channel两个组合起来就构成一个,CSP(Communicating Sequential Process-通信顺序过程)模型
+		goroute之间相互之间怎么进行通信的(1.通过管道 2.全局变量"这个不怎么推荐使用")
+		go格式化的命令
+			gofmt .\pipe.go
+			gofmt -w .\pipe.go	//替换原文件
+		golang是强类型语言
+		
+		
+	4.多返回值
+		a.一个函数返回多个值
+		func calc(a int,b int)(init,int){
+			sum := a + b
+			avg := (a+b)/2
+			return sum,avg
+		}
+		
+		
+	备注
+		代码地址:
+			https://github.com/banna2019/golang.git
+			
+			目录: banna2019/golang
