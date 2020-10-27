@@ -996,7 +996,7 @@ fmt.Println(end.Sub(start))
 
 ### 十一、Goroutine Recover 解决协程中出现的Panic
 
-```
+```go
 package main
 import (
 "fmt"
@@ -1030,6 +1030,7 @@ fmt.Println("main() ok=", i)
 time.Sleep(time.Second)
 }
 }
-
 ```
+
+
 
