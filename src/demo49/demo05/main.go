@@ -16,17 +16,23 @@ import (
 		3、关闭文件流 file.Close()
 */
 func main() {
-	file, err := os.OpenFile("C:/test.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	// file, err := os.OpenFile("./test.txt", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
+	file, err := os.OpenFile("./test.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer file.Close()
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	//写如文件
-	// for i := 0; i < 10; i++ {
-	// 	file.WriteString("直接写入的字符串数据" + strconv.Itoa(i) + "\r\n")
-	// }
+	/*
+		//写入文件1
+		for i := 0; i <= 10; i++ {
+			file.WriteString("直接写入数据字符串数据" + strconv.Itoa(i) + "\r\n")
+		}
+	*/
+
+	//写入文件2
 	var str = "直接写入的字符串数据byte"
 	file.Write([]byte(str))
+
 }

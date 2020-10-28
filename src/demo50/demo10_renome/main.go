@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	err := os.Rename("D:/000.avi", "D:/1111.avi")
+	err := os.Rename("./test1.txt", "./test2.txt")
 	if err != nil {
 		fmt.Println(err)
 	}

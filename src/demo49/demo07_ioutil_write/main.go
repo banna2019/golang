@@ -7,9 +7,9 @@ import (
 
 func main() {
 	str := "hello golang"
-	err := ioutil.WriteFile("C:/test.txt", []byte(str), 0666)
+	err := ioutil.WriteFile("./test1.txt", []byte(str), 0666)
 	if err != nil {
-		fmt.Println("write file failed, err:", err)
+		fmt.Println("Write file failed,err:", err)
 		return
 	}
 }

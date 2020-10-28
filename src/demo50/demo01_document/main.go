@@ -94,13 +94,13 @@ import (
 )
 
 func main() {
-	// 只读方式打开当前目录下的main.go文件  D:/go_demo/demo23/demo01/main.go
-	file, err := os.Open("./main.go")
-	defer file.Close() //必须得关闭文件流
+	//只读方式打开当前目录下的main.go文件 /Users/banna/Documents/Github/golang/src/demo48/08refect_struct/main.go
+	file, err := os.Open("/Users/banna/Documents/Github/golang/src/demo48/08refect_struct/main.go")
+	defer file.Close() //必须关闭文件流
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	//操作文件
-	fmt.Println(file) //&{0xc00014a780}
+	fmt.Println(file) //&{0xc00004a180},这输出的是一个地址
 }

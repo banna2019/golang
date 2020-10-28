@@ -8,7 +8,7 @@ import (
 )
 
 /*
-二、读取文件（方法2）bufio 读取文件
+二、读取文件（方法2）bufio 读取文件("bufio"是以流的方式读取的文件内容)
 
 		1、只读方式打开文件 file,err := os.Open()
 
@@ -20,19 +20,20 @@ import (
 */
 
 func main() {
-	file, err := os.Open("C:/test.txt")
+	file, err := os.Open("/Users/banna/Documents/Github/golang/src/demo48/08refect_struct/main.go")
 	defer file.Close()
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	//bufio 读取文件
+
+	//读取文件
 	var fileStr string
 	reader := bufio.NewReader(file)
 	for {
-		str, err := reader.ReadString('\n') //表示一次读取以行
-		if err == io.EOF {
+		str, err := reader.ReadString('\n') //一次读取一行
+		if err == io.EOF {                  //使用"bufio.NewReader"来读取的话,注意标记完成以后;可能还会返回"str"
 			fileStr += str
 			break
 		}

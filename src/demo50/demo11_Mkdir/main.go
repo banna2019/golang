@@ -14,7 +14,7 @@ func main() {
 
 	// os.Mkdir("./abc", 0666)
 
-	err := os.MkdirAll("./dir1/dir2/dir3", 0666) //创建多级目录
+	err := os.MkdirAll("./dir1/dir2/dir3", 0755) //创建多级目录
 	if err != nil {
 		fmt.Println(err)
 	}
