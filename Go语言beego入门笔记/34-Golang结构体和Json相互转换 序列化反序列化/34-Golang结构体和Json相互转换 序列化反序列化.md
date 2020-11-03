@@ -1,24 +1,24 @@
-一、关于JSON 数据............................................................................................................ 1
+一、关于JSON数据............................................................................................................ 1
 
-二、结构体与JSON 序列化................................................................................................ 2
+二、结构体与JSON序列化................................................................................................. 2
 
-三、结构体标签Tag............................................................................................................4
+三、结构体标签Tag.............................................................................................................4
 
-四、嵌套结构体和JSON 序列化反序列化........................................................................ 6
+四、嵌套结构体和JSON序列化反序列化........................................................................... 6
 
-五、关于Map、切片的序列化反序列化.......................................................................... 9
+五、关于Map、切片的序列化反序列化.............................................................................. 9
 
 
 
 ### 一、关于JSON 数据
 
-JSON(JavaScript Object Notation) 是一种轻量级的数据交换格式.易于人阅读和编写.同时也
+JSON(JavaScript Object Notation)是一种轻量级的数据交换格式.易于人阅读和编写.同时也
 
-易于机器解析和生成.RESTfull Api 接口中返回的数据都是json 数据.
+易于机器解析和生成.RESTfull Api接口中返回的数据都是json数据.
 
 Json 的基本格式如下:
 
-```golang
+```go
 {
 "a": "Hello",
 "b": "World"
@@ -27,7 +27,7 @@ Json 的基本格式如下:
 
 稍微复杂点的JSON
 
-```golang
+```go
 {
 "result": [{
 "_id": "59f6ef443ce1fb0fb02c7a43",
@@ -58,32 +58,34 @@ Json 的基本格式如下:
 
 ### 二、结构体与JSON 序列化
 
-比如我们Golang 要给App 或者小程序提供Api 接口数据,这个时候就需要涉及到结构体和
+比如Golang要给App或者小程序提供Api接口数据,这个时候就需要涉及到结构体和
 
-Json 之间的相互转换
+Json之间的相互转换
 
-Golang JSON 序列化是指把结构体数据转化成JSON 格式的字符串,Golang JSON 的反序列化
+Golang JSON序列化是指把结构体数据转化成JSON格式的字符串,Golang JSON的反序列化
 
-是指把JSON 数据转化成Golang中的结构体对象
+是指把JSON数据转化成Golang中的结构体对象
 
-Golang 中的序列化和反序列化主要通过"encoding/json"包中的json.Marshal()和json.Unmarshal()方法实现
+Golang中的序列化和反序列化主要通过"encoding/json"包中的json.Marshal()和json.Unmarshal()方法实现
 
 
 
-#### 1、结构体对象转化成Json 字符串
+#### 1、结构体对象转化成Json字符串
 
-```golang
+```go
 package main
 import (
 "encoding/json"
 "fmt"
 )
+
 type Student struct {
 ID int
 Gender string
-name string //私有属性不能被json 包访问
+name string //私有属性不能被json包访问
 Sno string
 }
+
 func main() {
 var s1 = Student{
 ID: 1,
@@ -100,14 +102,15 @@ fmt.Println(jsonStr)
 
 
 
-#### 2、Json 字符串转换成结构体对象
+#### 2、Json字符串转换成结构体对象
 
-```golang
+```go
 package main
 import (
 "encoding/json"
 "fmt"
 )
+
 type Student struct {
 ID int
 Gender string
@@ -132,34 +135,35 @@ fmt.Printf("反序列化后student=%#v student.Name=%v \n", student, student.Nam
 
 ### 三、结构体标签Tag
 
-Tag 是结构体的元信息,可以在运行的时候通过反射的机制读取出来.Tag 在结构体字段的
+Tag是结构体的元信息,可以在运行的时候通过反射的机制读取出来.Tag在结构体字段的
 
-后方定义,由一对反引号包裹起来,具体的格式如下：
+后方定义,由一对反引号包裹起来,具体的格式如下:
 
-```
+```GO
 key1:"value1" key2:"value2"
 ```
 
-结构体tag 由一个或多个键值对组成.键与值使用冒号分隔,值用双引号括起来.同一个结
+结构体tag由一个或多个键值对组成.键与值使用冒号分隔,值用双引号括起来.同一个结
 
 构体字段可以设置多个键值对tag,不同的键值对之间使用空格分隔.
 
-注意事项:  为结构体编写Tag 时,必须严格遵守键值对的规则.结构体标签的解析代码的
+注意事项:  为结构体编写Tag时,必须严格遵守键值对的规则.结构体标签的解析代码的
 
 容错能力很差,一旦格式写错,编译和运行时都不会提示任何错误,通过反射也无法正确取
 
-值.例如不要在key 和value 之间添加空格.
+值.例如不要在key和value之间添加空格.
 
 
 
-```golang
+```go
 package main
 import (
 "encoding/json"
 "fmt"
 )
+
 type Student struct {
-ID int `json:"id"` //通过指定tag 实现json 序列化该字段时的key
+ID int `json:"id"` //通过指定tag实现json序列化该字段时的key
 Gender string `json:"gender"`
 Name string
 Sno string
@@ -181,7 +185,7 @@ fmt.Println(jsonStr)
 
 
 
-```golang
+```go
 package main
 import (
 "encoding/json"
@@ -189,7 +193,7 @@ import (
 )
 
 type Student struct {
-ID int `json:"id"` //通过指定tag 实现json 序列化该字段时的key
+ID int `json:"id"` //通过指定tag实现json序列化该字段时的key
 Gender string `json:"gender"`
 Name string
 Sno string
@@ -209,14 +213,15 @@ fmt.Printf("%#v", s2)
 
 
 
-### 四、嵌套结构体和JSON 序列化反序列化
+### 四、嵌套结构体和JSON序列化反序列化
 
-```golang
+```go
 package main
 import (
 "encoding/json"
 "fmt"
 )
+
 //Student 学生
 type Student struct {
 ID int
@@ -229,6 +234,7 @@ type Class struct {
 Title string
 Students []Student
 }
+
 func main() {
 c := &Class{
 Title: "001",
@@ -254,12 +260,13 @@ fmt.Printf("json:%s\n", data)
 
 
 
-```golang
+```go
 package main
 import (
 "encoding/json"
 "fmt"
 )
+
 //Student 学生
 type Student struct {
 ID int
@@ -288,11 +295,10 @@ return
 }
 fmt.Printf("%#v\n", c1)
 }
-
 ```
 
 
 
 ### 五、关于Map、切片的序列化反序列化
 
-Map和切片也可以进行序列化和反序列化,后续详细讲解
+Map和切片也可以进行序列化和反序列化.

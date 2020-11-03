@@ -14,7 +14,7 @@
 
 
 
-1、Golang 内置的运算符
+### 1、Golang内置的运算符
 
 ​	1.算术运算符
 
@@ -28,7 +28,7 @@
 
 
 
-2、算数运算符
+### 2、算数运算符
 
 ![image-20200915032313407](/Users/banna/Library/Application Support/typora-user-images/image-20200915032313407.png)
 
@@ -38,7 +38,7 @@
 
 
 
-```
+```go
 package main
 
 import (
@@ -60,39 +60,47 @@ func main() {
 }
 ```
 
+
+
 注意: 在golang 中,++ 和-- 只能独立使用错误写法如下:
 
-```
+```go
 var i int = 8
 var a int
 a = i++ //错误，i++只能独立使用
 a = i-- //错误, i--只能独立使用
 ```
 
+
+
 注意:  在golang中没有前++ 错误写法如下:
 
-```
+```go
 var i int = 1
 ++i // 错误，在golang 没有前++
 --i // 错误，在golang 没有前--
 fmt.Println("i=", i)
 ```
 
+
+
 ++ --正确写法:
 
-```
+```go
 var i int = 1
 i++
 fmt.Println("i=", i)
 ```
 
-3、关系运算符
+
+
+### 3、关系运算符
 
 ![image-20200915032619968](/Users/banna/Library/Application Support/typora-user-images/image-20200915032619968.png)
 
 
 
-```
+```go
 package main
 
 import (
@@ -114,13 +122,15 @@ func main() {
 }
 ```
 
-4、逻辑运算符
+
+
+### 4、逻辑运算符
 
 ![image-20200915032708853](/Users/banna/Library/Application Support/typora-user-images/image-20200915032708853.png)
 
 
 
-```
+```go
 package main
 	import (
 	"fmt"
@@ -157,9 +167,11 @@ if !(age > 30) {
 }
 ```
 
+
+
 逻辑运算符短路演示
 
-```
+```go
 package main
 	import (
 	"fmt"
@@ -182,13 +194,15 @@ if i > 9 || test() {
 }
 ```
 
-5、赋值运算符
+
+
+### 5、赋值运算符
 
 ![image-20200915032901060](/Users/banna/Library/Application Support/typora-user-images/image-20200915032901060.png)
 
 
 
-```
+```go
 d := 8 + 2*8 // 赋值运算从右向左
 fmt.Println(d)
 x := 10
@@ -210,11 +224,13 @@ fmt.Println("x %= 3 的值:", x)
 
 ```
 
-6、运算符练习
+
+
+### 6、运算符练习
 
 练习1: 有两个变量,a和b,要求将其进行交换,最终打印结果
 
-```
+```go
 a := 9
 b := 2
 t := a
@@ -223,24 +239,30 @@ b = t //
 fmt.Printf("交换后的情况是a = %v , b=%v \n", a, b)
 ```
 
+
+
 练习2: 假如还有100 天放假,问: xx个星期零xx天
 
-```
+```go
 var days int = 100
 var week int = days / 7
 var day int = days % 7
 fmt.Printf("%d 个星期零%d 天\n", week, day)
 ```
 
+
+
 练习3: 定义一个变量保存华氏温度,华氏温度转换摄氏温度的公式为: 5/9*(华氏温度-100),请求出华氏温度对应的摄氏温度
 
-```
+```go
 var huashi float32 = 134.2
 var sheshi float32 = 5.0 / 9 * (huashi - 100)
 fmt.Printf("%v 对应的摄氏温度=%v \n", huashi, sheshi)
 ```
 
-7、位运算符(了解)
+
+
+### 7、位运算符(了解)
 
 位运算符对整数在内存中的二进制位进行操作
 
@@ -248,7 +270,7 @@ fmt.Printf("%v 对应的摄氏温度=%v \n", huashi, sheshi)
 
 
 
-```
+```go
 package main
 import "fmt"
 func main() {

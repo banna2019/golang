@@ -2,13 +2,13 @@
 
 二、反射的基本介绍...........................................................................................................2
 
-三、reflect.TypeOf()获取任意值的类型对象.....................................................................3
+三、reflect.TypeOf()获取任意值的类型对象........................................................................3
 
-四、reflect.ValueOf()........................................................................................................... 7
+四、reflect.ValueOf()............................................................................................................7
 
-五、结构体反射.................................................................................................................. 10
+五、结构体反射...................................................................................................................10
 
-六、不要乱用反射.............................................................................................................. 15
+六、不要乱用反射...............................................................................................................15
 
 
 
@@ -16,7 +16,7 @@
 
 ### 一、反射的引子
 
-有时需要写一个函数,这个函数有能力统一处理各种值类型,而这些类型可能无法共享同一个接口,也可能布局未知,也有可能这个类型在设计函数时还不存在,这个时候我就可以用到反射.
+有时需要写一个函数,这个函数有能力统一处理各种值类型,而这些类型可能无法共享同一个接口,也可能布局未知,也有可能这个类型在设计函数时还不存在,这个时候就可以用到反射.
 
 1、空接口可以存储任意类型的变量,那如何知道这个空接口保存数据的类型是什么？值是什么呢？
 
@@ -24,7 +24,7 @@
 
 ​	b、可以使用反射实现,也就是在程序运行时动态的获取一个变量的类型信息和值信息.
 
-2、把结构体序列化成json 字符串,自定义结构体Tag 标签的时候就用到了反射
+2、把结构体序列化成json字符串,自定义结构体Tag标签的时候就用到了反射
 
 ```go
 package main
@@ -32,12 +32,14 @@ import (
 "encoding/json"
 "fmt"
 )
+
 type Student struct {
 ID int `json:"id"`
 Gender string `json:"gender"`
 Name string `json:"name"`
 Sno string `json:"sno"`
 }
+
 func main() {
 var s1 = Student{
 ID: 1,
@@ -75,7 +77,7 @@ ORM: 对象关系映射(Object Relational Mapping),简称ORM)是通过使用描�
 
 
 
-###### Golang 中反射可以实现以下功能:
+###### Golang中反射可以实现以下功能:
 
 1、反射可以在程序运行期间动态的获取变量的各种信息,比如变量的类型类别
 
@@ -85,7 +87,7 @@ ORM: 对象关系映射(Object Relational Mapping),简称ORM)是通过使用描�
 
 
 
-###### Go 语言中的变量是分为两部分的:
+###### Go语言中的变量是分为两部分的:
 
 • 类型信息:  预先定义好的元信息.
 
@@ -95,7 +97,7 @@ ORM: 对象关系映射(Object Relational Mapping),简称ORM)是通过使用描�
 
 在GoLang的反射机制中,任何接口值都由是一个具体类型和具体类型的值两部分组成的.
 
-在GoLang中,反射的相关功能由内置的reflect 包提供,任意接口值在反射中都可以理解为
+在GoLang中,反射的相关功能由内置的reflect包提供,任意接口值在反射中都可以理解为
 
 由reflect.Type和reflect.Value两部分组成,并且reflect包提供了reflect.TypeOf和
 
@@ -105,7 +107,7 @@ reflect.ValueOf两个重要函数来获取任意对象的Value和Type.
 
 ### 三、reflect.TypeOf()获取任意值的类型对象
 
-在Go 语言中,使用reflect.TypeOf()函数可以接受任意interface{}参数,可以获得任意值的类
+在Go语言中,使用reflect.TypeOf()函数可以接受任意interface{}参数,可以获得任意值的类
 
 型对象(reflect.Type),程序通过类型对象可以访问任意值的类型信息.
 
@@ -115,10 +117,12 @@ import (
 "fmt"
 "reflect"
 )
+
 func reflectType(x interface{}) {
 v := reflect.TypeOf(x)
 fmt.Printf("type:%v\n", v)
 }
+
 func main() {
 var a float32 = 12.5
 reflectType(a) // type:float32
@@ -135,7 +139,7 @@ reflectType(b) // type:int64
 
 当需要区分指针、结构体等大品种的类型时,就会用到种类(Kind).举个例子,定义了两个指针类型和两个结构体类型,通过反射查看它们的类型和种类.
 
-Go 语言的反射中像数组、切片、Map、指针等类型的变量,它们的.Name()都是返回空.
+Go语言的反射中像数组、切片、Map、指针等类型的变量,它们的.Name()都是返回空.
 
 ```go
 package main
@@ -143,6 +147,7 @@ import (
 "fmt"
 "reflect"
 )
+
 func reflectType(x interface{}) {
 t := reflect.TypeOf(x)
 fmt.Printf("TypeOf:%v Name:%v Kind:%v\n", t, t.Name(), t.Kind())
@@ -156,6 +161,7 @@ Age int
 type Animal struct {
 Name string
 }
+
 func main() {
 var a *float32 // 指针
 var b myInt // 自定义类型
@@ -177,7 +183,7 @@ reflectType(f) //TypeOf:[]int Name: Kind:slice
 
 
 
-##### 在reflect 包中定义的Kind 类型如下:
+##### 在reflect包中定义的Kind类型如下:
 
 ```go
 type Kind uint
@@ -185,20 +191,20 @@ const (
 Invalid Kind = iota // 非法类型
 Bool // 布尔型
 Int // 有符号整型
-Int8 // 有符号8 位整型
-Int16 // 有符号16 位整型
-Int32 // 有符号32 位整型
-Int64 // 有符号64 位整型
+Int8 // 有符号8位整型
+Int16 // 有符号16位整型
+Int32 // 有符号32位整型
+Int64 // 有符号64位整型
 Uint // 无符号整型
-Uint8 // 无符号8 位整型
-Uint16 // 无符号16 位整型
-Uint32 // 无符号32 位整型
-Uint64 // 无符号64 位整型
+Uint8 // 无符号8位整型
+Uint16 // 无符号16位整型
+Uint32 // 无符号32位整型
+Uint64 // 无符号64位整型
 Uintptr // 指针
 Float32 // 单精度浮点数
 Float64 // 双精度浮点数
-Complex64 // 64 位复数类型
-Complex128 // 128 位复数类型
+Complex64 // 64位复数类型
+Complex128 // 128位复数类型
 Array // 数组
 Chan // 通道
 Func // 函数
@@ -220,7 +226,7 @@ reflect.ValueOf()返回的是reflect.Value 类型,其中包含了原始值的值
 
 始值之间可以互相转换.
 
-reflect.Value 类型提供的获取原始值的方法如下:
+reflect.Value类型提供的获取原始值的方法如下:
 
 | **方法**                 | **说明**                                                     |
 | ------------------------ | ------------------------------------------------------------ |
@@ -237,17 +243,19 @@ reflect.Value 类型提供的获取原始值的方法如下:
 
 ##### 1、通过反射获取原始值演示1
 
-```golang
+```go
 package main
 import (
 "fmt"
 "reflect"
 )
+
 func reflectValue(x interface{}) {
 v := reflect.ValueOf(x)
 var c = v.Int() + 6 //获取反射的原始值
 fmt.Println(c)
 }
+
 func main() {
 var a int64 = 100
 reflectValue(a)
@@ -258,12 +266,13 @@ reflectValue(a)
 
 ##### 2、通过反射获取原始值演示2
 
-```golang
+```go
 package main
 import (
 "fmt"
 "reflect"
 )
+
 func reflectValue(x interface{}) {
 v := reflect.ValueOf(x)
 k := v.Kind()
@@ -279,12 +288,14 @@ case reflect.Float64:
 fmt.Printf("type is float64, value is %f\n", v.Float())
 }
 }
+
+
 func main() {
 var a float32 = 3.14
 var b int64 = 100
 reflectValue(a) // type is float32, value is 3.140000
 reflectValue(b) // type is int64, value is 100
-// 将int 类型的原始值转换为reflect.Value 类型
+// 将int类型的原始值转换为reflect.Value类型
 c := reflect.ValueOf(10)
 fmt.Printf("type c :%T\n", c) // type c :reflect.Value
 }
@@ -306,12 +317,14 @@ import (
 "fmt"
 "reflect"
 )
+
 func reflectSetValue1(x interface{}) {
 v := reflect.ValueOf(x)
 if v.Kind() == reflect.Int64 {
-v.SetInt(200) //修改的是副本，reflect 包会引发panic
+v.SetInt(200) //修改的是副本,reflect包会引发panic
 }
 }
+
 func reflectSetValue2(x interface{}) {
 v := reflect.ValueOf(x)
 // 反射中使用Elem()方法获取指针对应的值
@@ -319,6 +332,7 @@ if v.Elem().Kind() == reflect.Int64 {
 v.Elem().SetInt(200)
 }
 }
+
 func main() {
 var a int64 = 100
 // reflectSetValue1(a) //panic: reflect: reflect.Value.SetInt using unaddressable value
@@ -337,7 +351,7 @@ fmt.Println(a)
 
 对象(reflect.Type)的NumField()和Field()方法获得结构体成员的详细信息.
 
-reflect.Type 中与获取结构体成员相关的的方法如下表所示.
+reflect.Type中与获取结构体成员相关的的方法如下表所示.
 
 | 方法                                                        | 说明                                                         |
 | ----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -352,19 +366,19 @@ reflect.Type 中与获取结构体成员相关的的方法如下表所示.
 
 
 
-##### 2、StructField 类型
+##### 2、StructField类型
 
-StructField类型用来描述结构体中的一个字段的信息.StructField 的定义如下:
+StructField类型用来描述结构体中的一个字段的信息.StructField的定义如下:
 
 ```go
 type StructField struct {
 // 参见http://golang.org/ref/spec#Uniqueness_of_identifiers
-Name string // Name 是字段的名字
-PkgPath string //PkgPath 是非导出字段的包路径,对导出字段该字段为""
+Name string // Name是字段的名字
+PkgPath string //PkgPath是非导出字段的包路径,对导出字段该字段为""
 Type Type // 字段的类型
 Tag StructTag // 字段的标签
 Offset uintptr // 字段在结构体中的字节偏移量
-Index []int // 用于Type.FieldByIndex 时的索引切片
+Index []int // 用于Type.FieldByIndex时的索引切片
 Anonymous bool // 是否匿名字段
 }
 ```
@@ -377,31 +391,36 @@ Anonymous bool // 是否匿名字段
 
 ###### 1、获取结构体属性,获取执行结构体方法
 
-```golang
+```go
 package main
 import (
 "fmt"
 "reflect"
 )
+
 //student 结构体
 type Student struct {
 Name string `json:"name"`
 Age int `json:"age"`
 Score int `json:"score"`
 }
+
 func (s Student) GetInfo() string {
 var str = fmt.Sprintf("姓名:%v 年龄:%v 成绩:%v", s.Name, s.Age, s.Score)
 fmt.Println(str)
 return str
 }
+
 func (s *Student) SetInfo(name string, age int, score int) {
 s.Name = name
 s.Age = age
 s.Score = score
 }
+
 func (s *Student) Print() {
 fmt.Println("打印方法...")
 }
+
 //打印字段
 func PrintStructField(s interface{}) {
 t := reflect.TypeOf(s)
@@ -411,12 +430,12 @@ if t.Kind() != reflect.Struct && t.Elem().Kind() != reflect.Struct {
 fmt.Println("传入的不是结构体")
 return
 }
-//1、通过类型变量里面的Field 可以获取结构体的字段
+//1、通过类型变量里面的Field可以获取结构体的字段
 field0 := t.Field(0)
 fmt.Println(field0.Name)
 fmt.Println(field0.Type)
 fmt.Println(field0.Tag.Get("json"))
-//2、通过类型变量里面的FieldByName 可以获取结构体的字段
+//2、通过类型变量里面的FieldByName可以获取结构体的字段
 field1, _ := t.FieldByName("Age")
 fmt.Println(field1.Name)
 fmt.Println(field1.Type)
@@ -434,7 +453,7 @@ if t.Kind() != reflect.Struct && t.Elem().Kind() != reflect.Struct {
 fmt.Println("传入的不是结构体")
 return
 }
-//1、通过类型变量里面的Method 可以获取结构体的方法
+//1、通过类型变量里面的Method可以获取结构体的方法
 var tMethod = t.Method(0) //注意
 fmt.Println(tMethod.Name)
 fmt.Println(tMethod.Type)
@@ -448,12 +467,13 @@ var params []reflect.Value //声明了[]reflect.Value
 params = append(params, reflect.ValueOf("张三"))
 params = append(params, reflect.ValueOf(22))
 params = append(params, reflect.ValueOf(100))
-v.MethodByName("SetInfo").Call(params) //传入的参数是[]reflect.Value, 返回[]reflect.Va
+v.MethodByName("SetInfo").Call(params) //传入的参数是[]reflect.Value,返回[]reflect.Va
 lue
 // 5、执行方法获取方法的值
 info := v.MethodByName("GetInfo").Call(nil)
 fmt.Println(info)
 }
+
 func main() {
 stu1 := Student{
 Name: "小明",
@@ -469,22 +489,25 @@ PrintStructFn(&stu1)
 
 ###### 2、修改结构体方法
 
-```golang
+```go
 package main
 import (
 "fmt"
 "reflect"
 )
-//student 结构体
+
+//student结构体
 type Student struct {
 Name string `json:"name"`
 Age int `json:"age"`
 Score int `json:"score"`
 }
+
 func (s Student) GetInfo() string {
 var str = fmt.Sprintf("姓名:%v 年龄:%v 成绩:%v", s.Name, s.Age, s.Score)
 return str
 }
+
 //反射修改结构体属性
 func reflectChangeStruct(s interface{}) {
 t := reflect.TypeOf(s)
@@ -498,6 +521,7 @@ name.SetString("李四") // 设置值
 age := v.Elem().FieldByName("Age")
 age.SetInt(20) // 设置值
 }
+
 func main() {
 stu1 := Student{
 Name: "小明",

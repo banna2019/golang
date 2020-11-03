@@ -24,5 +24,6 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Printf("%#v\n", s1)
+	fmt.Printf("%T\n", s1)
 	fmt.Println(s1.Name)
 }

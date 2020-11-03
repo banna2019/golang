@@ -84,17 +84,17 @@ func main() {
 	// fmt.Println(n1, n2, n3, n4)
 
 	//多个iota定义在一行
-	// const (
-	// 	n1, n2 = iota + 1, iota + 2
-	// 	n3, n4
-	// 	n5, n6
-	// )
+	const (
+		n1, n2 = iota + 1, iota + 2
+		n3, n4
+		n5, n6
+	)
 
-	// fmt.Println(n1, n2, n3, n4, n5, n6)
+	fmt.Println(n1, n2, n3, n4, n5, n6)
 
 	//go语言中变量的名字是区分大小写的
-	var age = 20
-	var Age = 30
+	// var age = 20
+	// var Age = 30
 
-	fmt.Println(age, Age)
+	// fmt.Println(age, Age)
 }

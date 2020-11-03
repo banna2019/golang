@@ -2,37 +2,37 @@
 
 二、进程、线程以及并行、并发.......................................................................................2
 
-三、Golang 中的协程（goroutine）以及主线程.............................................................. 4
+三、Golang 中的协程（goroutine）以及主线程...............................................................4
 
 四、Goroutine 的使用以及sync.WaitGroup......................................................................5
 
-五、启动多个Goroutine..................................................................................................... 7
+五、启动多个Goroutine.....................................................................................................7
 
-六、设置Golang 并行运行的时候占用的cup 数量........................................................ 8
+六、设置Golang 并行运行的时候占用的cup 数量.............................................................8
 
-七、Goroutine 统计素数..................................................................................................... 9
+七、Goroutine 统计素数....................................................................................................9
 
-八、Channel 管道.............................................................................................................. 11
+八、Channel 管道..............................................................................................................11
 
-​	1、channel 类型...............................................................................................................11
+​	1、channel 类型.............................................................................................................11
 
-​	2、创建channel...............................................................................................................11
+​	2、创建channel..............................................................................................................11
 
-​	3、channel 操作...............................................................................................................12
+​	3、channel 操作.............................................................................................................12
 
-​	4、管道阻塞.................................................................................................................... 13
+​	4、管道阻塞....................................................................................................................13
 
-​	5、for range 从管道循环取值.........................................................................................14
+​	5、for range 从管道循环取值..........................................................................................14
 
-九、Goroutine 结合Channel 管道....................................................................................15
+九、Goroutine 结合Channel 管道........................................................................................15
 
 十、单向管道...................................................................................................................... 20
 
-十、select 多路复用............................................................................................................ 20
+十一、select 多路复用.........................................................................................................20
 
-十、Golang 并发安全和锁................................................................................................ 23
+十二、Golang 并发安全和锁................................................................................................23
 
-十一、Goroutine Recover 解决协程中出现的Panic....................................................... 28
+十三、Goroutine Recover 解决协程中出现的Panic............................................................28
 
 
 
@@ -48,7 +48,7 @@
 
 2、使用并发或者并行的方式,将统计素数的任务分配给多个goroutine去完成,这个时候就用到了goroutine
 
-3、goroutine 结合channel
+3、goroutine结合channel
 
 
 
@@ -98,13 +98,13 @@
 
 
 
-### 三、Golang 中的协程(goroutine)以及主线程
+### 三、Golang中的协程(goroutine)以及主线程
 
-golang 中的主线程:  (可以理解为线程/也可以理解为进程),在一个Golang 程序的主线程上可以起多个协程.Golang中多协程可以实现并行或者并发.
+golang中的主线程:  (可以理解为线程/也可以理解为进程),在一个Golang程序的主线程上可以起多个协程.Golang中多协程可以实现并行或者并发.
 
 协程:  可以理解为用户级线程,这是对内核透明的,也就是系统并不知道有协程的存在,是
 
-完全由用户自己的程序进行调度的.Golang 的一大特色就是从语言层面原生支持协程,在
+完全由用户自己的程序进行调度的.Golang的一大特色就是从语言层面原生支持协程,在
 
 函数或者方法前面加go关键字就可创建一个协程.可以说Golang中的协程就是
 
@@ -114,37 +114,39 @@ goroutine .
 
 
 
-Golang 中的多协程有点类似其他语言中的多线程.
+Golang中的多协程有点类似其他语言中的多线程.
 
-多协程和多线程:  Golang中每个goroutine (协程)默认占用内存远比Java 、C 的线程少.
+多协程和多线程:  Golang中每个goroutine(协程)默认占用内存远比Java 、C的线程少.
 
-OS 线程(操作系统线程)一般都有固定的栈内存(通常为2MB 左右),一个goroutine (协程) 占用内存非常小,只有2KB 左右,多协程goroutine 切换调度开销方面远比线程要少.
+OS线程(操作系统线程)一般都有固定的栈内存(通常为2MB左右),一个goroutine(协程)占用内存非常小,只有2KB左右,多协程goroutine切换调度开销方面远比线程要少.
 
 这也是为什么越来越多的大公司使用Golang的原因之一.
 
 
 
-### 四、Goroutine 的使用以及sync.WaitGroup
+### 四、Goroutine的使用以及sync.WaitGroup
 
 并行执行需求:
 
-在主线程(可以理解成进程)中,开启一个goroutine, 该协程每隔50毫秒秒输出"你好golang"
+在主线程(可以理解成进程)中,开启一个goroutine, 该协程每隔50毫秒输出"你好golang"
 
 在主线程中也每隔50毫秒输出"你好golang", 输出10 次后,退出程序,要求主线程和goroutine同时执行.
 
-```golang
+```go
 package main
 import (
 "fmt"
 "strconv"
 "time"
 )
+
 func test() {
 for i := 1; i <= 10; i++ {
 fmt.Println("tesst () hello,world " + strconv.Itoa(i))
 time.Sleep(time.Second)
 }
 }
+
 func main() {
 go test() // 开启了一个协程
 for i := 1; i <= 10; i++ {
@@ -166,7 +168,7 @@ time.Sleep(time.Second)
 
 sync.WaitGroup 可以实现主线程等待协程执行完毕.
 
-```golang
+```go
 package main
 import (
 "fmt"
@@ -174,22 +176,25 @@ import (
 "sync"
 "time"
 )
+
 var wg sync.WaitGroup //1、定义全局的WaitGroup
+
 func test() {
 for i := 1; i <= 10; i++ {
 fmt.Println("test () 你好golang " + strconv.Itoa(i))
 time.Sleep(time.Millisecond * 50)
 }
-wg.Done() // 4、goroutine 结束就登记-1
+wg.Done() // 4、goroutine结束就登记-1
 }
+
 func main() {
-wg.Add(1) //2、启动一个goroutine 就登记+1
+wg.Add(1) //2、启动一个goroutine就登记+1
 go test()
 for i := 1; i <= 2; i++ {
 fmt.Println(" main() 你好golang" + strconv.Itoa(i))
 time.Sleep(time.Millisecond * 50)
 }
-wg.Wait() // 3、等待所有登记的goroutine 都结束
+wg.Wait() // 3、等待所有登记的goroutine都结束
 }
 ```
 
@@ -197,22 +202,24 @@ wg.Wait() // 3、等待所有登记的goroutine 都结束
 
 ### 五、启动多个Goroutine
 
-在Go 语言中实现并发就是这样简单,还可以启动多个goroutine.让我们再来一个例子:
+在Go语言中实现并发就是这样简单,还可以启动多个goroutine.来一个例子:
 
-(这里使用了sync.WaitGroup 来实现等待goroutine执行完毕)
+(这里使用了sync.WaitGroup来实现等待goroutine执行完毕)
 
-```golang
+```go
 var wg sync.WaitGroup
+
 func hello(i int) {
-defer wg.Done() // goroutine 结束就登记-1
+defer wg.Done() // goroutine结束就登记-1
 fmt.Println("Hello Goroutine!", i)
 }
+
 func main() {
 for i := 0; i < 10; i++ {
-wg.Add(1) // 启动一个goroutine 就登记+1
+wg.Add(1) // 启动一个goroutine就登记+1
 go hello(i)
 }
-wg.Wait() // 等待所有登记的goroutine 都结束
+wg.Wait() // 等待所有登记的goroutine都结束
 }
 ```
 
@@ -228,22 +235,23 @@ wg.Wait() // 等待所有登记的goroutine 都结束
 
 Go运行时的调度器使用GOMAXPROCS参数来确定需要使用多少个OS线程来同时执行Go
 
-代码.默认值是机器上的CPU 核心数.例如在一个8 核心的机器上,调度器会把Go代码同
+代码.默认值是机器上的CPU核心数.例如在一个8核心的机器上,调度器会把Go代码同
 
-时调度到8 个OS 线程上.
+时调度到8个OS线程上.
 
-Go 语言中可以通过runtime.GOMAXPROCS()函数设置当前程序并发时占用的CPU 逻辑核心数.
+Go语言中可以通过runtime.GOMAXPROCS()函数设置当前程序并发时占用的CPU逻辑核心数.
 
 Go1.5 版本之前,默认使用的是单核心执行. Go1.5版本之后,默认使用全部的CPU逻辑核心数.
 
-```golang
+```go
 package main
 import (
 "fmt"
 "runtime"
 )
+
 func main() {
-//获取当前计算机上面的Cup 个数
+//获取当前计算机上面的Cup个数
 cpuNum := runtime.NumCPU()
 fmt.Println("cpuNum=", cpuNum)
 //可以自己设置使用多个cpu
@@ -254,19 +262,19 @@ fmt.Println("ok")
 
 
 
-### 七、Goroutine 统计素数
+### 七、Goroutine统计素数
 
 需求:  要统计1-120000 的数字中那些是素数？
 
 ##### 1、通过传统的for循环来统计
 
-```golang
+```go
 func main() {
 start := time.Now().Unix()
 for num := 1; num <= 120000; num++ {
 flag := true //假设是素数
 for i := 2; i < num; i++ {
-if num%i == 0 { //说明该num 不是素数
+if num%i == 0 { //说明该num不是素数
 flag = false
 break
 }
@@ -282,9 +290,9 @@ fmt.Println("普通的方法耗时=", end-start)
 
 
 
-##### 2、goroutine 开启多个协程统计
+##### 2、goroutine开启多个协程统计
 
-```golang
+```go
 package main
 
 import (
@@ -292,7 +300,9 @@ import (
 "sync"
 "time"
 )
+
 var wg sync.WaitGroup
+
 func fn1(n int) {
 for num := (n-1)*30000 + 1; num <= n*30000; num++ {
 flag := true //假设是素数
@@ -308,6 +318,7 @@ if flag {
 }
 wg.Done()
 }
+
 func main() {
 start := time.Now().Unix()
 for i := 1; i <= 4; i++ {
@@ -328,7 +339,7 @@ fmt.Println("普通的方法耗时=", end-start)
 
 
 
-### 八、Channel 管道
+### 八、Channel管道
 
 管道是Golang在语言级别上提供的goroutine间的通讯方式,可以使用channel在
 
@@ -338,25 +349,25 @@ fmt.Println("普通的方法耗时=", end-start)
 
 
 
-Golang 的并发模型是CSP(Communicating Sequential Processes),提倡通过通信共享内
+Golang的并发模型是CSP(Communicating Sequential Processes),提倡通过通信共享内
 
 存而不是通过共享内存而实现通信.
 
 
 
-Go 语言中的管道(channel)是一种特殊的类型.管道像一个传送带或者队列,总是遵
+Go语言中的管道(channel)是一种特殊的类型.管道像一个传送带或者队列,总是遵
 
 循先入先出(First In First Out)的规则,保证收发数据的顺序.每一个管道都是一个具体类
 
-型的导管,也就是声明channel 的时候需要为其指定元素类型.
+型的导管,也就是声明channel的时候需要为其指定元素类型.
 
 
 
-##### 1、channel 类型
+##### 1、channel类型
 
-channel 是一种类型,一种引用类型.声明管道类型的格式如下:
+channel是一种类型,一种引用类型.声明管道类型的格式如下:
 
-```golang
+```go
 var 变量chan 元素类型
 举几个例子：
 var ch1 chan int // 声明一个传递整型的管道
@@ -368,11 +379,11 @@ var ch3 chan []int // 声明一个传递int 切片的管道
 
 ##### 2、创建channel
 
-声明的管道后需要使用make函数初始化之后才能使用.
+声明的管道需要使用make函数初始化之后才能使用.
 
 创建channel 的格式如下:
 
-```golang
+```go
 make(chan 元素类型,容量)
 ```
 
@@ -380,18 +391,18 @@ make(chan 元素类型,容量)
 
 举几个例子:
 
-```golang
-//创建一个能存储10 个int 类型数据的管道
+```go
+//创建一个能存储10个int类型数据的管道
 ch1 := make(chan int, 10)
-//创建一个能存储4 个bool 类型数据的管道
+//创建一个能存储4个bool类型数据的管道
 ch2 := make(chan bool, 4)
-//创建一个能存储3 个[]int 切片类型数据的管道
+//创建一个能存储3个[]int切片类型数据的管道
 ch3 := make(chan []int, 3)
 ```
 
 
 
-##### 3、channel 操作
+##### 3、channel操作
 
 管道有发送(send)、接收(receive)和关闭(close)三种操作.
 
@@ -399,7 +410,7 @@ ch3 := make(chan []int, 3)
 
 现在先使用以下语句定义一个管道:
 
-```golang
+```go
 ch := make(chan int, 3)
 ```
 
@@ -409,7 +420,7 @@ ch := make(chan int, 3)
 
 将一个值发送到管道中.
 
-```golang
+```go
 ch <- 10 // 把10 发送到ch 中
 ```
 
@@ -419,7 +430,7 @@ ch <- 10 // 把10 发送到ch 中
 
 从一个管道中接收值.
 
-```golang
+```go
 x := <- ch // 从ch 中接收值并赋值给变量x
 <-ch // 从ch 中接收值,忽略结果
 ```
@@ -430,7 +441,7 @@ x := <- ch // 从ch 中接收值并赋值给变量x
 
 通过调用内置的close函数来关闭管道.
 
-```golang
+```go
 close(ch)
 ```
 
@@ -464,7 +475,7 @@ close(ch)
 
 ​	无缓冲的管道又称为阻塞的管道.来看一下下面的代码:
 
-```golang
+```go
 func main() {
 ch := make(chan int)
 ch <- 10
@@ -476,7 +487,7 @@ fmt.Println("发送成功")
 
 上面这段代码能够通过编译,但是执行的时候会出现以下错误:
 
-```golang
+```go
 fatal error: all goroutines are asleep - deadlock!
 goroutine 1 [chan send]:
 main.main()
@@ -492,7 +503,7 @@ exit status 2
 
 管道的时候为其指定管道的容量,例如:
 
-```golang
+```go
 func main() {
 ch := make(chan int, 1) // 创建一个容量为1 的有缓冲区管道
 ch <- 10
@@ -504,15 +515,15 @@ fmt.Println("发送成功")
 
 只要管道的容量大于零,那么该管道就是有缓冲的管道,管道的容量表示管道中能存放元素
 
-的数量.就像你小区的快递柜只有那么个多格子,格子满了就装不下了,就阻塞了,等到别
+的数量.就像小区的快递柜只有那么多个格子,格子满了就装不下了,就阻塞了,等到别
 
-人取走一个快递员就能往里面放一个.
+人取走一个,快递员就能往里面放一个.
 
 
 
 管道阻塞具体代码如下:
 
-```golang
+```go
 func main() {
 ch := make(chan int, 1)
 ch <- 10
@@ -523,7 +534,7 @@ fmt.Println("发送成功")
 
 解决办法:
 
-```golang
+```go
 func main() {
 ch := make(chan int, 1)
 ch <- 10 //放进去
@@ -537,9 +548,9 @@ fmt.Println("发送成功")
 
 
 
-##### 5、for range 从管道循环取值
+##### 5、for range从管道循环取值
 
-当向管道中发送完数据时,可以通过close 函数来关闭管道.
+当向管道中发送完数据时,可以通过close函数来关闭管道.
 
 当管道被关闭时,再往该管道发送值会引发panic,从该管道取值的操作会先取完管道中的
 
@@ -547,9 +558,10 @@ fmt.Println("发送成功")
 
 来看下面这个例子:
 
-```golang
+```go
 package main
 import "fmt"
+
 //循环遍历管道数据
 func main() {
 var ch1 = make(chan int, 5)
@@ -557,9 +569,9 @@ for i := 0; i < 5; i++ {
 ch1 <- i + 1
 }
 close(ch1) //关闭管道
-//使用for range 遍历管道,当管道被关闭的时候就会退出for range,如果没有关闭管道
+//使用for range遍历管道,当管道被关闭的时候就会退出for range,如果没有关闭管道
 就会报个错误fatal error: all goroutines are asleep - deadlock!
-//通过for range 来遍历管道数据管道没有key
+//通过for range来遍历管道数据管道没有key
 for val := range ch1 {
 fmt.Println(val)
 }
@@ -574,13 +586,13 @@ fmt.Println(val)
 
 
 
-### 九、Goroutine 结合Channel 管道
+### 九、Goroutine结合Channel管道
 
 需求1:  定义两个方法,一个方法给管道里面写数据,一个给管道里面读取数据.要求同步进行.
 
 1、开启一个fn1的的协程给向管道inChan中写入100条数据
 
-2、开启一个fn2的协程读取inChan 中写入的数据
+2、开启一个fn2的协程读取inChan中写入的数据
 
 3、注意: fn1和fn2同时操作一个管道
 
@@ -588,14 +600,16 @@ fmt.Println(val)
 
 
 
-```golang
+```go
 package main
 import (
 "fmt"
 "sync"
 "time"
 )
+
 var wg sync.WaitGroup
+
 func fn1(intChan chan int) {
 for i := 0; i < 100; i++ {
 intChan <- i + 1
@@ -605,6 +619,7 @@ time.Sleep(time.Millisecond * 100)
 close(intChan)
 wg.Done()
 }
+
 func fn2(intChan chan int) {
 for v := range intChan {
 fmt.Printf("readData 读到数据=%v\n", v)
@@ -612,6 +627,7 @@ time.Sleep(time.Millisecond * 50)
 }
 wg.Done()
 }
+
 func main() {
 allChan := make(chan int, 100)
 wg.Add(1)
@@ -627,15 +643,16 @@ fmt.Println("读取完毕...")
 
 需求2:  goroutine结合channel实现统计1-120000的数字中那些是素数?
 
-```golang
+```go
 package main
 import (
 "fmt"
 "sync"
 "time"
 )
+
 var wg sync.WaitGroup
-//向intChan 放入1-120000 个数
+//向intChan放入1-120000个数
 func putNum(intChan chan int) {
 for i := 1; i <= 1000; i++ {
 intChan <- i
@@ -644,12 +661,13 @@ intChan <- i
 close(intChan)
 wg.Done()
 }
-// 从intChan 取出数据,并判断是否为素数,如果是,就放入到primeChan
+
+// 从intChan取出数据,并判断是否为素数,如果是,就放入到primeChan
 func primeNum(intChan chan int, primeChan chan int, exitChan chan bool) {
 for num := range intChan {
 var flag bool = true
 for i := 2; i < num; i++ {
-if num%i == 0 { //说明该num 不是素数
+if num%i == 0 { //说明该num不是素数
 flag = false
 break
 }
@@ -663,6 +681,7 @@ primeChan <- num
 exitChan <- true
 wg.Done()
 }
+
 //打印素数的方法
 func printPrime(primeChan chan int) {
 for v := range primeChan {
@@ -670,16 +689,17 @@ fmt.Println(v)
 }
 wg.Done()
 }
+
 func main() {
 start := time.Now().Unix()
 intChan := make(chan int, 1000)
 primeChan := make(chan int, 20000) //放入结果
 //标识退出的管道
-exitChan := make(chan bool, 8) // 8 个
-//开启一个协程,向intChan 放入1-8000 个数
+exitChan := make(chan bool, 8) //8个
+//开启一个协程,向intChan放入1-8000个数
 wg.Add(1)
 go putNum(intChan)
-//开启4 个协程,从intChan 取出数据,并判断是否为素数,如果是,就放入到primeChan
+//开启4个协程,从intChan取出数据,并判断是否为素数,如果是,就放入到primeChan
 for i := 0; i < 8; i++ {
 wg.Add(1)
 go primeNum(intChan, primeChan, exitChan)
@@ -693,7 +713,7 @@ go func() {
 for i := 0; i < 8; i++ {
 <-exitChan
 }
-//当我们从exitChan 取出了8 个结果,就可以放心的关闭prprimeChan
+//当从exitChan取出了8个结果,就可以放心的关闭primeChan
 close(primeChan)
 wg.Done()
 }()
@@ -714,7 +734,7 @@ fmt.Println("main 线程退出")
 
 例如:
 
-```golang
+```go
 //1. 在默认情况下下,管道是双向
 //var chan1 chan int //可读可写
 //2 声明为只写
@@ -732,13 +752,13 @@ fmt.Println("num2", num2)
 
 
 
-### 十、select 多路复用
+### 十一、select多路复用
 
 传统的方法在遍历管道时,如果不关闭会阻塞而导致deadlock,在实际开发中,可能不好确定什么关闭该管道.
 
 也许会写出如下代码使用遍历的方式来实现:
 
-```golang
+```go
 for{
 // 尝试从ch1 接收值
 data, ok := <-ch1
@@ -752,13 +772,13 @@ data, ok := <-ch2
 
 这种方式虽然可以实现从多个管道接收值的需求,但是运行性能会差很多.为了应对这种场景,Go内置了select关键字,可以同时响应多个管道的操作.
 
-select 的使用类似于switch语句,它有一系列case分支和一个默认的分支.每个case会对
+select的使用类似于switch语句,它有一系列case分支和一个默认的分支.每个case会对
 
-应一个管道的通信(接收或发送)过程.select 会一直等待,直到某个case的通信操作完成
+应一个管道的通信(接收或发送)过程.select会一直等待,直到某个case的通信操作完成
 
 时,就会执行case分支对应的语句.具体格式如下:
 
-```golang
+```go
 select{
 case <-ch1:
 ...
@@ -775,29 +795,28 @@ default:
 
 举个小例子来演示下select的使用:
 
-```golan
+```go
 package main
 import (
 "fmt"
 "time"
 )
+
 func main() {
-//使用select 可以解决从管道取数据的阻塞问题,传统的方法在遍历管道时,如果不关闭会阻
-塞而导致deadlock,在实际开发中,可能我们不好确定什么关闭该管道.
-//1.定义一个管道10 个数据int
+//使用select可以解决从管道取数据的阻塞问题,传统的方法在遍历管道时,如果不关闭会阻塞而导致deadlock,在实际开发中,可能不好确定什么关闭该管道.
+//1.定义一个管道10个数据int
 intChan := make(chan int, 10)
 for i := 0; i < 10; i++ {
 intChan <- i
 }
-//2.定义一个管道5 个数据string
+//2.定义一个管道5个数据string
 stringChan := make(chan string, 5)
 for i := 0; i < 5; i++ {
 stringChan <- "hello" + fmt.Sprintf("%d", i)
 }
 for {
 select {
-//注意: 这里,如果intChan 一直没有关闭,不会一直阻塞而deadlock,会自动到
-下一个case 匹配
+//注意: 这里,如果intChan一直没有关闭,不会一直阻塞而deadlock,会自动到下一个case匹配
 case v := <-intChan:
 fmt.Printf("从intChan 读取的数据%d\n", v)
 time.Sleep(time.Second)
@@ -815,19 +834,19 @@ return
 
 
 
-使用select 语句能提高代码的可读性.
+使用select语句能提高代码的可读性.
 
 ​	• 可处理一个或多个channel的发送/接收操作.
 
 ​	• 如果多个case同时满足,select会随机选择一个.
 
-​	• 对于没有case的select{}会一直等待,可用于阻塞main 函数.
+​	• 对于没有case的select{}会一直等待,可用于阻塞main函数.
 
 
 
-### 十、Golang 并发安全和锁
+### 十二、Golang并发安全和锁
 
-需求:  现在要计算1-60 的各个数的阶乘,并且把各个数的阶乘放入到map中.最后显示出
+需求:  现在要计算1-60的各个数的阶乘,并且把各个数的阶乘放入到map中.最后显示出
 
 来.要求使用goroutine完成.
 
@@ -837,18 +856,20 @@ return
 
 ​	2.启动多个协程,将统计的将结果放入到map中只使用Goroutine实现,运行的时候可能会出现资源争夺问题concurrent map writes：
 
-```golang
+```go
 package main
 import (
 "fmt"
 "sync"
 _ "time"
 )
+
 var (
 myMap = make(map[int]int)
 wg sync.WaitGroup
 )
-// test 函数就是计算n!, 让将这个结果放入到myMap
+
+// test函数就是计算n!,让将这个结果放入到myMap
 func test(n int) {
 res := 1
 for i := 1; i <= n; i++ {
@@ -857,6 +878,7 @@ res *= i
 myMap[n] = res
 wg.Done()
 }
+
 func main() {
 for i := 1; i <= 60; i++ {
 wg.Add(1)
@@ -879,19 +901,21 @@ fmt.Printf("map[%d]=%d\n", i, v)
 
 代码的问题:
 
-```golang
+```go
 package main
 import (
 "fmt"
 "sync"
 _ "time"
 )
+
 var (
 myMap = make(map[int]int)
 wg sync.WaitGroup
 lock sync.Mutex
 )
-// test 函数就是计算n!, 让将这个结果放入到myMap
+
+// test函数就是计算n!,让将这个结果放入到myMap
 func test(n int) {
 res := 1
 for i := 1; i <= n; i++ {
@@ -904,6 +928,7 @@ myMap[n] = res
 lock.Unlock()
 wg.Done()
 }
+
 func main() {
 for i := 1; i <= 60; i++ {
 wg.Add(1)
@@ -934,7 +959,7 @@ fmt.Printf("map[%d]=%d\n", i, v)
 
 ##### 2、读写互斥锁
 
-互斥锁是完全互斥的,但是有很多实际的场景下是读多写少的,当我们并发的去读取一个资
+互斥锁是完全互斥的,但是有很多实际的场景下是读多写少的,当并发的去读取一个资
 
 源不涉及资源修改的时候是没有必要加锁的,这种场景下使用读写锁是更好的一种选择.读
 
@@ -948,30 +973,33 @@ goroutine无论是获取读锁还是写锁都会等待.
 
 读写锁示例:
 
-```golang
+```go
 var (
 x int64
 wg sync.WaitGroup
 lock sync.Mutex
 rwlock sync.RWMutex
 )
+
 func write() {
 // lock.Lock() // 加互斥锁
 rwlock.Lock() // 加写锁
 x = x + 1
-time.Sleep(10 * time.Millisecond) // 假设读操作耗时10 毫秒
+time.Sleep(10 * time.Millisecond) // 假设读操作耗时10毫秒
 rwlock.Unlock() // 解写锁
 // lock.Unlock() // 解互斥锁
 wg.Done()
 }
+
 func read() {
 // lock.Lock() // 加互斥锁
 rwlock.RLock() // 加读锁
-time.Sleep(time.Millisecond) // 假设读操作耗时1 毫秒
+time.Sleep(time.Millisecond) // 假设读操作耗时1毫秒
 rwlock.RUnlock() // 解读锁
 // lock.Unlock() // 解互斥锁
 wg.Done()
 }
+
 func main() {
 start := time.Now()
 for i := 0; i < 10; i++ {
@@ -994,14 +1022,15 @@ fmt.Println(end.Sub(start))
 
 
 
-### 十一、Goroutine Recover 解决协程中出现的Panic
+### 十三、Goroutine Recover解决协程中出现的Panic
 
-```
+```go
 package main
 import (
 "fmt"
 "time"
 )
+
 //函数
 func sayHello() {
 for i := 0; i < 10; i++ {
@@ -1009,6 +1038,7 @@ time.Sleep(time.Second)
 fmt.Println("hello,world")
 }
 }
+
 //函数
 func test() {
 //这里我们可以使用defer + recover
@@ -1018,10 +1048,12 @@ if err := recover(); err != nil {
 fmt.Println("test() 发生错误", err)
 }
 }()
+  
 //定义了一个map
 var myMap map[int]string
 myMap[0] = "golang" //error
 }
+
 func main() {
 go sayHello()
 go test()
@@ -1030,5 +1062,6 @@ fmt.Println("main() ok=", i)
 time.Sleep(time.Second)
 }
 }
+
 ```
 

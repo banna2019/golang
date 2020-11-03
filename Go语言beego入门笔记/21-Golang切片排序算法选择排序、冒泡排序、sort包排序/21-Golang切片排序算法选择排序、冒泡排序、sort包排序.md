@@ -2,7 +2,7 @@
 
 2、冒泡排序........................................................................................................................ 1
 
-3、Golang 内置Sort 包对切片进行排序........................................................................... 2
+3、Golang 内置Sort 包对切片进行排序.............................................................................. 2
 
 
 
@@ -14,7 +14,7 @@
 
 第二个位置上,依此类推,直到所有的数成为有序序列.
 
-```
+```go
 var numSlice = []int{9, 8, 7, 6, 5, 4}
 for i := 0; i < len(numSlice); i++ {
 for j := i + 1; j < len(numSlice); j++ {
@@ -36,7 +36,7 @@ fmt.Println(numSlice)
 
 特点: 每一轮比较中,都会选出一个最大的数,放在正确的位置.
 
-```
+```go
 var numSlice = []int{9, 8, 7, 6, 5, 4}
 for i := 0; i < len(numSlice); i++ {
 for j := i + 1; j < len(numSlice); j++ {
@@ -50,21 +50,25 @@ numSlice[j] = temp
 fmt.Println(numSlice)
 ```
 
+
+
 ### 3、Golang 内置Sort 包对切片进行排序
 
-#### 1、sort 包的文档:
+#### 3.1、sort 包的文档:
 
 ​	http://docscn.studygolang.com/pkg/sort/
 
 ​	https://golang.org/src/sort
 
-#### 2、sort 升序排序
+
+
+#### 3.2、sort 升序排序
 
 对于int 、float64 和string 数组或是切片的排序, go 分别提供了sort.Ints() 、
 
 sort.Float64s() 和sort.Strings() 函数, 默认都是从小到大排序.
 
-```
+```go
 intList := []int{2, 4, 3, 5, 7, 6, 9, 8, 1, 0}
 float8List := []float64{4.2, 5.9, 12.4, 10.2, 50.7, 99.9, 31.4, 27.81828, 3.14}
 stringList := []string{"a", "c", "b", "z", "x", "w", "y", "d", "f", "i"}
@@ -77,15 +81,17 @@ sort.Strings(stringList)
 [a b c d f i w x y z]
 ```
 
-#### 3、sort 降序排序
 
-Golang 的sort 包可以使用sort.Reverse(slice)来调换
 
-slice.Interface.Less,也就是比较函数,所以,int 、float64 和string
+#### 3.3、sort 降序排序
+
+Golang的sort包可以使用sort.Reverse(slice)来调换
+
+slice.Interface.Less,也就是比较函数,所以,int 、float64和string
 
 的逆序排序函数可以这么写.
 
-```
+```go
 intList := []int{2, 4, 3, 5, 7, 6, 9, 8, 1, 0}
 float8List := []float64{4.2, 5.9, 12.4, 10.2, 50.7, 99.9, 31.4, 27.81828, 3.14}
 stringList := []string{"a", "c", "b", "z", "x", "w", "y", "d", "f", "i"}

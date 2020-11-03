@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+)
+
 func main() {
 
 	/*
@@ -31,4 +36,13 @@ func main() {
 	// 	"sex":      "男",
 	// }
 	// fmt.Println(userinfo)
+
+	var wordMap = make(map[string]int)
+	var str = "how do you do"
+	var arrSlice = strings.Split(str, " ")
+	for _, word := range arrSlice {
+		wordMap[word]++
+	}
+
+	fmt.Println(wordMap)
 }
